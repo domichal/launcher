@@ -2,7 +2,8 @@
 
 import pygame
 
-from skin_manager import SkinManager
+from skin_manager import MySkinManager
+from lang_manager import MyLangManager
 
 
 class MultiLabel: ##Multi Line Label 
@@ -12,7 +13,7 @@ class MultiLabel: ##Multi Line Label
     _Height=100
     _Text=""
     _FontObj=None
-    _Color = SkinManager().GiveColor('Text')
+    _Color = MySkinManager.GiveColor('Text')
     _CanvasHWND = None
     _TextSurf = None
     _MaxWidth = 0
@@ -20,7 +21,7 @@ class MultiLabel: ##Multi Line Label
     def __init__(self):
         pass
     
-    def Init(self,text,font_obj,color=SkinManager().GiveColor('Text')):
+    def Init(self,text,font_obj,color=MySkinManager.GiveColor('Text')):
         self._Color = color
         self._FontObj = font_obj
         self._Text = text
@@ -49,15 +50,27 @@ class MultiLabel: ##Multi Line Label
         self._CanvasHWND = _canvashwnd
 
     def blit_text(self, surface,text, pos, font):
+        iscjk = MyLangManager.IsCJKMode()
+        
         color = self._Color
         words = [word.split(' ') for word in text.splitlines()]
         space = font.size(' ')[0]
+        
+        if iscjk:
+            space = 0
+            words = [list(word.decode("utf8")) for word in text.splitlines()]
+        
         max_width = self._Width
         x ,y = pos
         row_total_width = 0
         lines = 0 
-        for i,line in enumerate(words[:4]):
-            for word in line[:12]:
+        line_max = 12
+        row_max  = 4
+        if iscjk:
+            line_max = line_max*2
+        
+        for i,line in enumerate(words[:row_max]): 
+            for word in line[:line_max]:
                 word_surface = font.render(word, True, color)
                 word_width = word_surface.get_width()
                 word_height = word_surface.get_height()

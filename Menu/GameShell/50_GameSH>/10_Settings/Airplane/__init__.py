@@ -19,67 +19,14 @@ from UI.scroller   import ListScroller
 from UI.icon_pool  import MyIconPool
 from UI.icon_item  import IconItem
 from UI.multi_icon_item import MultiIconItem
+from UI.lang_manager import MyLangManager
 
 from UI.multilabel import MultiLabel
 
-class InfoPageListItem(object):
-    _PosX = 0
-    _PosY = 0
-    _Width = 0
-    _Height = 20
-
-    _Labels = {}
-    _Icons  = {}
-    _Fonts  = {}
-
-    _LinkObj = None
-    
-    def __init__(self):
-        self._Labels = {}
-        self._Icons  = {}
-        self._Fonts  = {}
-
-    def SetSmallText(self,text):
-        
-        l = MultiLabel()
-        l.SetCanvasHWND(self._Parent._CanvasHWND)
-        l.Init(text,self._Fonts["small"])
-        
-        self._Labels["Small"] = l
-
-        #if self._Labels["Small"]._Width > self._Width:
-        #    self._Width = self._Labels["Small"]._Width
-        if self._Labels["Small"]._Height >= self._Height:
-            self._Height = self._Labels["Small"]._Height+10
-        
-    def Init(self,text):
-
-        #self._Fonts["normal"] = fonts["veramono12"]
-        
-        l = Label()
-        l._PosX = 10
-        l.SetCanvasHWND(self._Parent._CanvasHWND)
-
-        l.Init(text,self._Fonts["normal"])
-        self._Labels["Text"] = l
-        
-    def Draw(self):
-        
-        self._Labels["Text"]._PosY = self._PosY
-        self._Labels["Text"].Draw()
-
-        if "Small" in self._Labels:
-            self._Labels["Small"]._PosX = self._Labels["Text"]._Width + 16 
-            self._Labels["Small"]._PosY = self._PosY 
-            self._Labels["Small"].Draw()
-        
-        
-    
-
 class AirplanePage(Page):
-    _FootMsg =  ["Nav.","Rescue","","Back","Toggle"]
+    _FootMsg =  ["Nav","Rescue","","Back","Toggle"]
     _MyList = []
-    _ListFontObj = fonts["varela13"]
+    _ListFontObj = MyLangManager.TrFont("varela13")
     
     _AList = {}
 
@@ -206,19 +153,19 @@ class AirplanePage(Page):
         out = commands.getstatusoutput('sudo rfkill list | grep yes | cut -d " " -f3')
         print out
         if "yes" in out[1]:
-            self._Screen._MsgBox.SetText("Turning On")
+            self._Screen._MsgBox.SetText("TurningOn")
             self._Screen._MsgBox.Draw()
             commands.getstatusoutput("sudo rfkill unblock all")
             self._Screen._TitleBar._InAirPlaneMode = False
         
         else:
-            self._Screen._MsgBox.SetText("Turning Off")
+            self._Screen._MsgBox.SetText("TurningOff")
             self._Screen._MsgBox.Draw()
             commands.getstatusoutput("sudo rfkill block all")
             self._Screen._TitleBar._InAirPlaneMode = True
     
     def UnBlockAll(self):
-        self._Screen._MsgBox.SetText("Turning On")
+        self._Screen._MsgBox.SetText("TurningOn")
         self._Screen._MsgBox.Draw()
         commands.getstatusoutput("sudo rfkill unblock all")
         self._Screen._TitleBar._InAirPlaneMode = False

@@ -8,7 +8,7 @@ from constants   import Width,Height,RUNSYS
 from label       import Label
 from fonts       import fonts
 from full_screen import FullScreen
-from skin_manager import SkinManager
+from skin_manager import MySkinManager
 
 import config
 
@@ -22,8 +22,8 @@ class CounterScreen(FullScreen):
     _BottomLabel = None
     _NumberLabel = None
     
-    _BGColor = SkinManager().GiveColor('Black')
-    _FGColor = SkinManager().GiveColor('White')
+    _BGColor = MySkinManager.GiveColor('Black')
+    _FGColor = MySkinManager.GiveColor('White')
     
     _Counting = False
     _Number = 10
@@ -75,7 +75,8 @@ class CounterScreen(FullScreen):
             return
         self._Counting = False
         self._Number = 10
-
+        self._inter_counter = 0
+        
         if self._GobjectIntervalId != -1:
             gobject.source_remove(self._GobjectIntervalId)
             self._GobjectIntervalId = -1

@@ -19,12 +19,17 @@ from UI.keys_def import CurKeys
 from UI.confirm_page import ConfirmPage
 from UI.download     import Download
 from UI.download_process_page import DownloadProcessPage
-from UI.skin_manager import SkinManager
+from UI.skin_manager import MySkinManager
+from UI.lang_manager import MyLangManager
+
+from UI.info_page_list_item import InfoPageListItem
 
 from libs.roundrects import aa_round_rect
 from libs.DBUS       import is_wifi_connected_now
 
 import config
+
+LauncherLoc = "/home/cpi/launcher"
 
 class UpdateDownloadPage(DownloadProcessPage):
     _MD5 = ""
@@ -39,7 +44,7 @@ class UpdateDownloadPage(DownloadProcessPage):
                     
                     if filename.endswith(".tar.gz"):                    
                         #/home/cpi/apps/[launcher]
-                        cmdpath = "tar zxf " + CmdClean(filename) + " -C /home/cpi/apps ;rm -rf "+ filename
+                        cmdpath = "tar zxf " + CmdClean(filename) + " -C /home/cpi/ ;rm -rf "+ filename
                         pygame.event.post( pygame.event.Event(RUNEVT, message=cmdpath))
                         
                     self.ReturnToUpLevelPage()
@@ -60,7 +65,7 @@ class UpdateDownloadPage(DownloadProcessPage):
                     print(filename)
                     os.system("rm -rf %s" % CmdClean(filename))
                     
-                    self._Screen._MsgBox.SetText("Download failed")
+                    self._Screen._MsgBox.SetText("DownloadFailed")
                     self._Screen._MsgBox.Draw()
                     self._Screen.SwapAndShow()
                     return False
@@ -105,6 +110,7 @@ class UpdateConfirmPage(ConfirmPage):
     _GIT = False
     
     def KeyDown(self,event):
+        global LauncherLoc
         if event.key == CurKeys["Menu"] or event.key == CurKeys["A"]:
             self.ReturnToUpLevelPage()
             self._Screen.Draw()
@@ -112,7 +118,7 @@ class UpdateConfirmPage(ConfirmPage):
             
         if event.key == CurKeys["B"]:
             if self._GIT == True:
-                cmdpath = "feh --bg-center /home/cpi/apps/launcher/sys.py/gameshell/wallpaper/updating.png; cd /home/cpi/apps/launcher ;git pull; git reset --hard %s ; feh --bg-center /home/cpi/apps/launcher/sys.py/gameshell/wallpaper/loading.png " % self._Version
+                cmdpath = "feh --bg-center %s/sys.py/gameshell/wallpaper/updating.png; cd %s ;git pull; git reset --hard %s ; feh --bg-center %s/sys.py/gameshell/wallpaper/loading.png " % (LauncherLoc,LauncherLoc,self._Version,LauncherLoc)
                 pygame.event.post( pygame.event.Event(RUNEVT, message=cmdpath))
                 self._GIT = False
                 return
@@ -120,7 +126,7 @@ class UpdateConfirmPage(ConfirmPage):
             if self._DownloadPage == None:
                 self._DownloadPage = UpdateDownloadPage()
                 self._DownloadPage._Screen = self._Screen
-                self._DownloadPage._Name   = "Downloading..."                
+                self._DownloadPage._Name   = "Downloading"
                 self._DownloadPage.Init()
 
             self._DownloadPage._MD5 = self._MD5
@@ -148,65 +154,14 @@ class UpdateConfirmPage(ConfirmPage):
         self.Reset()
 
 
-class InfoPageListItem(object):
-    _PosX = 0
-    _PosY = 0
-    _Width = 0
-    _Height = 30
-
-    _Labels = {}
-    _Icons  = {}
-    _Fonts  = {}
-
-    _LinkObj = None
-    
-    def __init__(self):
-        self._Labels = {}
-        self._Icons  = {}
-        self._Fonts  = {}
-
-    def SetSmallText(self,text):
-        
-        l = Label()
-        l._PosX = 40
-        l.SetCanvasHWND(self._Parent._CanvasHWND)
-        l.Init(text,self._Fonts["small"])
-        self._Labels["Small"] = l
-        
-    def Init(self,text):
-
-        #self._Fonts["normal"] = fonts["veramono12"]
-        
-        l = Label()
-        l._PosX = 10
-        l.SetCanvasHWND(self._Parent._CanvasHWND)
-
-        l.Init(text,self._Fonts["normal"])
-        self._Labels["Text"] = l
-
-    def Draw(self):
-        
-        self._Labels["Text"]._PosY = self._PosY + (self._Height - self._Labels["Text"]._Height)/2
-        self._Labels["Text"].Draw()
-
-        if "Small" in self._Labels:
-            self._Labels["Small"]._PosX = self._Width - self._Labels["Small"]._Width-5
-            
-            self._Labels["Small"]._PosY = self._PosY + (self._Height - self._Labels["Small"]._Height)/2
-            self._Labels["Small"].Draw()
-        
-        pygame.draw.line(self._Parent._CanvasHWND,SkinManager().GiveColor('Line'),(self._PosX,self._PosY+self._Height-1),(self._PosX+self._Width,self._PosY+self._Height-1),1)
-        
-
 class UpdatePage(Page):
     _Icons = {}
-    _FootMsg = ["Nav.","Check Update","","Back",""]
+    _FootMsg = ["Nav","Check Update","","Back",""]
 
     _ListFontObj = fonts["varela15"]    
     _ConfirmPage = None
     _AList    = {}
     _MyList   = []
-    
     def __init__(self):
         Page.__init__(self)
         self._Icons = {}    
@@ -256,7 +211,8 @@ class UpdatePage(Page):
         self.GenList()
         
     def CheckUpdate(self):
-        self._Screen._MsgBox.SetText("Checking update...")
+        global LauncherLoc
+        self._Screen._MsgBox.SetText("CheckingUpdate")
         self._Screen._MsgBox.Draw()
         self._Screen.SwapAndShow()
 
@@ -280,12 +236,12 @@ class UpdatePage(Page):
                             self._Screen.PushPage(self._ConfirmPage)
                             
                             self._Screen.Draw()
-                            self._ConfirmPage.SnapMsg("Confirm Update to %s ?" % json_["version"] )
+                            self._ConfirmPage.SnapMsg(MyLangManager.Tr("ConfirmUpdateToFQ") % json_["version"] )
                             self._Screen.SwapAndShow()
                             
                     elif "gitversion" in json_: ### just use git to  run update
                         cur_dir = os.getcwd()
-                        os.chdir("/home/cpi/apps/launcher")
+                        os.chdir(LauncherLoc)
                         current_git_version = get_git_revision_short_hash()
                         current_git_version = current_git_version.strip("\n")
                         current_git_version = current_git_version.strip("\t")
@@ -299,11 +255,11 @@ class UpdatePage(Page):
                             self._Screen.PushPage(self._ConfirmPage)
                             
                             self._Screen.Draw()
-                            self._ConfirmPage.SnapMsg("Update to %s ?" % json_["gitversion"] )
+                            self._ConfirmPage.SnapMsg(MyLangManager.Tr("UpdateToFQ") % json_["gitversion"] )
                             self._Screen.SwapAndShow()
                         else:
                             self._Screen.Draw()
-                            self._Screen._MsgBox.SetText("Launcher is up to date")
+                            self._Screen._MsgBox.SetText("LauncherIsUpToDate")
                             self._Screen._MsgBox.Draw()
                             self._Screen.SwapAndShow()
                             pygame.time.delay(765)
@@ -334,12 +290,12 @@ class UpdatePage(Page):
                     self._Screen.SwapAndShow()
                 else:
                     self._Screen.Draw()
-                    self._Screen._MsgBox.SetText("Checking update failed")
+                    self._Screen._MsgBox.SetText("CheckingUpdateFailed")
                     self._Screen._MsgBox.Draw()
                     self._Screen.SwapAndShow()
             else:
                 self._Screen.Draw()
-                self._Screen._MsgBox.SetText("Please Check your Wi-Fi connection")
+                self._Screen._MsgBox.SetText("CheckWifiConnection")
                 self._Screen._MsgBox.Draw()
                 self._Screen.SwapAndShow()
 
@@ -360,7 +316,7 @@ class APIOBJ(object):
         self._UpdatePage = UpdatePage()
 
         self._UpdatePage._Screen = main_screen
-        self._UpdatePage._Name ="Update"
+        self._UpdatePage._Name = "Update"
         self._UpdatePage.Init()
         
     def API(self,main_screen):
