@@ -246,14 +246,14 @@ class TitleBar:
         self.SyncSoundVolume()
 
         
-        bluetooth   =  MultiIconItem()
-        bluetooth._MyType = ICON_TYPES["STAT"]
-        bluetooth._Parent = self
-        bluetooth._ImageName = icon_base_path+"bluetooth.png"
-        bluetooth.Adjust(start_x+self._icon_width+self._icon_width+8,self._icon_height/2+(self._BarHeight-self._icon_height)/2,self._icon_width,self._icon_height,0)        
+        # bluetooth   =  MultiIconItem()
+        # bluetooth._MyType = ICON_TYPES["STAT"]
+        # bluetooth._Parent = self
+        # bluetooth._ImageName = icon_base_path+"bluetooth.png"
+        # bluetooth.Adjust(start_x+self._icon_width+self._icon_width+8,self._icon_height/2+(self._BarHeight-self._icon_height)/2,self._icon_width,self._icon_height,0)        
         
-        self._Icons["bluetooth"] = bluetooth
-        self.CheckBluetooth()
+        # self._Icons["bluetooth"] = bluetooth
+        # self.CheckBluetooth()
         
         round_corners   =  MultiIconItem()
         round_corners._IconWidth = 10
