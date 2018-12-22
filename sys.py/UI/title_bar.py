@@ -57,7 +57,7 @@ class TitleBar:
         if self._InLowBackLight < 0:
             self.CheckBatteryStat()
             self.SyncSoundVolume()
-            # self.CheckBluetooth()
+            self.CheckBluetooth()
             self.UpdateWifiStrength()
             
             SwapAndShow()
@@ -67,7 +67,7 @@ class TitleBar:
             if self._InLowBackLight > 10:
                 self.CheckBatteryStat()
                 self.SyncSoundVolume()
-                # self.CheckBluetooth()
+                self.CheckBluetooth()
                 self.UpdateWifiStrength()
                 
                 self._InLowBackLight = 0
@@ -253,7 +253,7 @@ class TitleBar:
         bluetooth.Adjust(start_x+self._icon_width+self._icon_width+8,self._icon_height/2+(self._BarHeight-self._icon_height)/2,self._icon_width,self._icon_height,0)        
         
         self._Icons["bluetooth"] = bluetooth
-        # self.CheckBluetooth()
+        self.CheckBluetooth()
         
         round_corners   =  MultiIconItem()
         round_corners._IconWidth = 10

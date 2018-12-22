@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*- 
-
+import re
 import pygame
 #import math
 import  commands
@@ -137,7 +137,8 @@ class BleInfoPage(Page):
         self._MyList = []
         self._PsIndex = 0
         start_x  = 0
-        start_y  = 0        
+        start_y  = 0
+         
         for i,v in enumerate( self._AList):
             #print(i,v) # (0, dbus.String(u'AddressType'))
             
@@ -170,11 +171,11 @@ class BleInfoPage(Page):
             elif sm_text == "1":
                 sm_text="Yes"
             
+            sm_text = sm_text[:20]
             li.SetSmallText(sm_text)
             
             li._PosX = 2
             self._MyList.append(li)                      
-    
 
     def ScrollUp(self):
         if len(self._MyList) == 0:
@@ -393,6 +394,8 @@ class BluetoothPage(Page):
     
     _ADAPTER_DEV  = "hci0"
     
+    _Offline = False
+    
     def __init__(self):
         Page.__init__(self)
         self._WirelessList = []
@@ -562,17 +565,27 @@ class BluetoothPage(Page):
         self._WirelessList = []
         start_x = 0
         start_y = 0
-
+        
+        counter = 0
         for i,v in enumerate(self._Devices):
+            if "Name" in self._Devices[v]:
+                if len(self._Devices[v]["Name"]) < 2:
+                    continue
+                if re.match("[0-9a-f]{2}([-:]?)[0-9a-f]{2}(\\1[0-9a-f]{2}){4}$", self._Devices[v]["Name"].lower()): ## skip xx:xx:xx:xx:xx
+                    continue
+            else:
+                continue
+            
             ni = NetItem()
             ni._Parent = self
             ni._PosX = start_x
-            ni._PosY = start_y + i* NetItem._Height
+            ni._PosY = start_y + counter* NetItem._Height
             ni._Width = Width
             ni._FontObj = self._ListFontObj
             
             ni.Init(v,self._Devices[v])
             
+            counter += 1
             self._WirelessList.append(ni)
 
         self._PsIndex = 0   
@@ -607,10 +620,18 @@ class BluetoothPage(Page):
         self.GenNetworkList()
     
     def OnLoadCb(self):
-        self.RefreshDevices()
+        self._Offline = False
+        if self._Screen._TitleBar._InAirPlaneMode == False:
+            out = commands.getstatusoutput("hcitool dev | grep hci0 |cut -f3") ## bluetooth maybe dead after airplane mode
+            if len(out[1]) < 17:
+                self._Offline = True
+                print("Bluetooth OnLoadCb ,can not find hci0 alive,try to reboot")
+            else:
+                self.RefreshDevices()
+                self.GenNetworkList()
+        else:
+            self._Offline = True
         
-        self.GenNetworkList()
-    
     def ScrollUp(self):
         if len(self._WirelessList) == 0:
             return
@@ -638,6 +659,10 @@ class BluetoothPage(Page):
     def KeyDown(self,event):
         
         if event.key == CurKeys["A"] or event.key == CurKeys["Menu"]:
+            if self._Offline == True:
+                self.AbortedAndReturnToUpLevel()
+                return
+            
             if self._Adapter != None:
                 try:
                     self._Adapter.StopDiscovery()
@@ -669,13 +694,15 @@ class BluetoothPage(Page):
             self._Screen.SwapAndShow()       
         
         if event.key == CurKeys["X"]:
-            
-            self.Rescan()   
+            if self._Offline == False:
+                self.Rescan()   
 
         if event.key == CurKeys["Y"]:
             if len(self._WirelessList) == 0:
                 return
-
+            if self._Offline == True:
+                return
+            
             self._InfoPage._AList = self._WirelessList[self._PsIndex]._Atts
             self._InfoPage._Path  = self._WirelessList[self._PsIndex]._Path
             self._Screen.PushPage(self._InfoPage)
@@ -683,7 +710,8 @@ class BluetoothPage(Page):
             self._Screen.SwapAndShow()
             
         if event.key == CurKeys["B"]:
-            self.TryConnect()
+            if self._Offline == False:
+                self.TryConnect()
 
     def Draw(self):
         self.ClearCanvas()
@@ -733,10 +761,10 @@ class APIOBJ(object):
         self._Page.Init()
         
         bus.add_signal_receiver(self._Page.DbusPropertiesChanged,
-			dbus_interface = "org.freedesktop.DBus.Properties",
-			signal_name = "PropertiesChanged",
-			arg0 = "org.bluez.Device1",
-			path_keyword = "path")
+            dbus_interface = "org.freedesktop.DBus.Properties",
+            signal_name = "PropertiesChanged",
+            arg0 = "org.bluez.Device1",
+            path_keyword = "path")
             
     def API(self,main_screen):
         if main_screen !=None:
