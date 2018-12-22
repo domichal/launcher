@@ -57,7 +57,7 @@ class TitleBar:
         if self._InLowBackLight < 0:
             self.CheckBatteryStat()
             self.SyncSoundVolume()
-            self.CheckBluetooth()
+            # self.CheckBluetooth()
             self.UpdateWifiStrength()
             
             SwapAndShow()
@@ -67,7 +67,7 @@ class TitleBar:
             if self._InLowBackLight > 10:
                 self.CheckBatteryStat()
                 self.SyncSoundVolume()
-                self.CheckBluetooth()
+                # self.CheckBluetooth()
                 self.UpdateWifiStrength()
                 
                 self._InLowBackLight = 0
