@@ -9,9 +9,8 @@ import shutil
 from constants import Width,Height,ICON_TYPES
 from page   import Page,PageSelector
 from label  import Label
-from fonts  import fonts
 from util_funcs import midRect
-from keys_def   import CurKeys
+from keys_def   import CurKeys, IsKeyStartOrA, IsKeyMenuOrB
 from confirm_page import ConfirmPage
 from lang_manager import MyLangManager
 
@@ -32,14 +31,14 @@ class DeleteConfirmPage(ConfirmPage):
 
     def KeyDown(self,event):
 
-        if event.key == CurKeys["Menu"] or event.key == CurKeys["A"]:
+        if IsKeyMenuOrB(event.key):
 
             self.ReturnToUpLevelPage()
             self._Screen.Draw()
             self._Screen.SwapAndShow()
 
 
-        if event.key == CurKeys["B"]:
+        if IsKeyStartOrA(event.key):
             try:
                 os.remove(self._TrashDir+"/"+os.path.basename(self._FileName))
             except:

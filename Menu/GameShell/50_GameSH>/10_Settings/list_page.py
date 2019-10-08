@@ -9,9 +9,8 @@ from libs.roundrects import aa_round_rect
 from UI.constants import Width,Height
 from UI.page   import Page,PageSelector
 from UI.label  import Label
-from UI.fonts  import fonts
 from UI.util_funcs import midRect,FileExists
-from UI.keys_def   import CurKeys
+from UI.keys_def   import CurKeys, IsKeyStartOrA, IsKeyMenuOrB
 from UI.scroller   import ListScroller
 from UI.skin_manager import MySkinManager
 from UI.lang_manager import MyLangManager
@@ -50,23 +49,27 @@ class ListPage(Page):
         ps._PosX = 2
         self._Ps = ps
         self._PsIndex = 0
-        
+
         #                ""   pkgname, label
         alist         = [["","Airplane","Airplane Mode"],
                          ["","PowerOptions","Power Options"],
                          ["","Wifi","Wi-Fi"],
                          ["","Bluetooth","Bluetooth"],
-                         ["","Sound","Sound Volume"],
+                         ["","Sound","Sound  Volume"],
                          ["","Brightness","BackLight Brightness"],
                          ["","Storage",""],
                          ["","Time","Timezone"],
                          ["","Languages","Languages"],
                          ["","Notification","Notification"],
-                         ["","Update", ""],
+                         ["","Update", "Update Launcher"],
+                         ["","Cores", "Retroarch cores manager"],
                          ["","About",  "About"],
-                         ["","PowerOFF","Power off"],
+                         ["","PowerOFF","Power OFF"],
                          ["","ButtonsLayout","Buttons Layout"],
-                         ["","LauncherGo","Switch to LauncherGo"]]
+                         ["","Skins","Theme Manager"],
+                         ["","LauncherGo","Switch to LauncherGo"],
+                         ["","Lima","GPU Driver Switch"],
+                         ["","GateWay","Network gateway switch"]]
 
         start_x  = 0
         start_y  = 0
@@ -102,30 +105,6 @@ class ListPage(Page):
         self._Scroller._PosY = 2
         self._Scroller.Init()
 
-    def ScrollUp(self):
-        if len(self._MyList) == 0:
-            return
-        self._PsIndex -= 1
-        if self._PsIndex < 0:
-            self._PsIndex = 0
-        cur_li = self._MyList[self._PsIndex]
-        if cur_li._PosY < 0:
-            for i in range(0, len(self._MyList)):
-                self._MyList[i]._PosY += self._MyList[i]._Height
-        
-
-    def ScrollDown(self):
-        if len(self._MyList) == 0:
-            return
-        self._PsIndex +=1
-        if self._PsIndex >= len(self._MyList):
-            self._PsIndex = len(self._MyList) -1
-
-        cur_li = self._MyList[self._PsIndex]
-        if cur_li._PosY +cur_li._Height > self._Height:
-            for i in range(0,len(self._MyList)):
-                self._MyList[i]._PosY -= self._MyList[i]._Height
-
     def Click(self):
         cur_li = self._MyList[self._PsIndex]
         if cur_li._LinkObj != None:
@@ -136,7 +115,7 @@ class ListPage(Page):
 
         
     def KeyDown(self,event):
-        if event.key == CurKeys["A"] or event.key == CurKeys["Menu"]:
+        if IsKeyMenuOrB(event.key):
             self.ReturnToUpLevelPage()
             self._Screen.Draw()
             self._Screen.SwapAndShow()
@@ -151,7 +130,7 @@ class ListPage(Page):
             self._Screen.SwapAndShow()
         
 
-        if event.key == CurKeys["Enter"]:
+        if IsKeyStartOrA(event.key):
             self.Click()
             
     def Draw(self):

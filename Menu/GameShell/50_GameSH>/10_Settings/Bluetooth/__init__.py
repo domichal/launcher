@@ -15,9 +15,8 @@ from libs.DBUS import  bus, adapter,devices
 from UI.constants import Width,Height,ICON_TYPES
 from UI.page   import Page,PageSelector
 from UI.label  import Label
-from UI.fonts  import fonts
 from UI.util_funcs import midRect
-from UI.keys_def   import CurKeys
+from UI.keys_def   import CurKeys, IsKeyStartOrA, IsKeyMenuOrB
 from UI.scroller   import ListScroller
 from UI.icon_pool  import MyIconPool
 from UI.icon_item  import IconItem
@@ -28,20 +27,23 @@ from UI.info_page_list_item import InfoPageListItem
 
 from UI.multilabel import MultiLabel
 from UI.lang_manager import MyLangManager
+from UI.keyboard import Keyboard
 
 from net_item import NetItem
+
+from agent import BleAgent,BleAgentPairPage
 
 class BleForgetConfirmPage(ConfirmPage):
 
     _ConfirmText = MyLangManager.Tr("ConfirmForgetQ")
     
     def KeyDown(self,event):
-        if event.key == CurKeys["Menu"] or event.key == CurKeys["A"]:
+        if IsKeyMenuOrB(event.key):
             self.ReturnToUpLevelPage()
             self._Screen.Draw()
             self._Screen.SwapAndShow()
             
-        if event.key == CurKeys["B"]:
+        if IsKeyStartOrA(event.key):
             self.SnapMsg(MyLangManager.Tr("Deleting"))
             self._Screen.Draw()
             self._Screen.SwapAndShow()
@@ -94,11 +96,11 @@ class BleInfoPageSelector(PageSelector):
                           (x,y,self._Width-4,h),self._BackgroundColor,4,0,self._BackgroundColor)
 
 class BleInfoPage(Page):
-    _FootMsg =  ["Nav","Disconnect","Forget","Back",""]
+    _FootMsg =  ["Nav","Forget","Disconnect","Back",""]
     _MyList = []
     _ListFontObj = MyLangManager.TrFont("varela15")
-    _ListSmFontObj = fonts["varela12"]  # small font
-    _ListSm2FontObj= fonts["varela11"]
+    _ListSmFontObj = MySkinManager.GiveFont("varela12")  # small font
+    _ListSm2FontObj= MySkinManager.GiveFont("varela11")
     
     _AList = {}
     _Path = ""
@@ -177,30 +179,6 @@ class BleInfoPage(Page):
             li._PosX = 2
             self._MyList.append(li)                      
 
-    def ScrollUp(self):
-        if len(self._MyList) == 0:
-            return
-        self._PsIndex -= 1
-        if self._PsIndex < 0:
-            self._PsIndex = 0
-        cur_li = self._MyList[self._PsIndex]
-        if cur_li._PosY < 0:
-            for i in range(0, len(self._MyList)):
-                self._MyList[i]._PosY += self._MyList[i]._Height
-        
-
-    def ScrollDown(self):
-        if len(self._MyList) == 0:
-            return
-        self._PsIndex +=1
-        if self._PsIndex >= len(self._MyList):
-            self._PsIndex = len(self._MyList) -1
-
-        cur_li = self._MyList[self._PsIndex]
-        if cur_li._PosY +cur_li._Height > self._Height:
-            for i in range(0,len(self._MyList)):
-                self._MyList[i]._PosY -= self._MyList[i]._Height
-
     def TryToForget(self):
         global adapter
         proxy_obj = bus.get_object("org.bluez", self._Path)
@@ -213,9 +191,16 @@ class BleInfoPage(Page):
         try:
             adapter.RemoveDevice(dev)
         except Exception,e:
-            print(str(e)) 
+            err_name = e.get_dbus_name()
+            if err_name == "org.freedesktop.DBus.Error.NoReply":
+                self._Screen._MsgBox.SetText("DBus noreply")
+            else:
+                self._Screen._MsgBox.SetText("Forget failed")
+            
+            self._Screen._MsgBox.Draw()
+            self._Screen.SwapAndShow()
         
-        pygame.time.delay(400)
+        pygame.time.delay(500)
         
         self.ReturnToUpLevelPage()
         self._Screen.Draw()
@@ -239,9 +224,15 @@ class BleInfoPage(Page):
         try:
             dev.Disconnect()
         except Exception,e:
-            print(str(e))        
+            err_name = e.get_dbus_name()
+            if err_name == "org.freedesktop.DBus.Error.NoReply":
+                self._Screen._MsgBox.SetText("DBus noreply")
+            else:
+                self._Screen._MsgBox.SetText("Disconnect failed")
+            self._Screen._MsgBox.Draw()
+            self._Screen.SwapAndShow()
         
-        pygame.time.delay(300)
+        pygame.time.delay(500)
         self.ReturnToUpLevelPage()
         self._Screen.Draw()
         self._Screen.SwapAndShow()
@@ -274,7 +265,7 @@ class BleInfoPage(Page):
         self._Screen.SwapAndShow()
 
     def KeyDown(self,event):
-        if event.key == CurKeys["A"] or event.key == CurKeys["Menu"]:
+        if IsKeyMenuOrB(event.key):
             self.ReturnToUpLevelPage()
             self._Screen.Draw()
             self._Screen.SwapAndShow()
@@ -288,7 +279,7 @@ class BleInfoPage(Page):
             self._Screen.Draw()
             self._Screen.SwapAndShow()
         
-        if event.key == CurKeys["Enter"]:
+        if IsKeyStartOrA(event.key):
             self.Click()
             
         if event.key == CurKeys["X"]:
@@ -336,10 +327,10 @@ class BleListSelector(PageSelector):
 
     def Draw(self):
         idx = self._Parent._PsIndex
-        if idx < len( self._Parent._WirelessList):
-            x = self._Parent._WirelessList[idx]._PosX+2
-            y = self._Parent._WirelessList[idx]._PosY+1
-            h = self._Parent._WirelessList[idx]._Height -3
+        if idx < len( self._Parent._MyList):
+            x = self._Parent._MyList[idx]._PosX+2
+            y = self._Parent._MyList[idx]._PosY+1
+            h = self._Parent._MyList[idx]._Height -3
         
             self._PosX = x
             self._PosY = y
@@ -367,7 +358,7 @@ class BleListMessageBox(Label):
 
 
 class BluetoothPage(Page):
-    _WirelessList = []
+    _MyList = []
     #Wicd dbus part
     _Adapter = None
     _Dbus     = None
@@ -386,9 +377,9 @@ class BluetoothPage(Page):
     _BlockCb           = None
     
     _LastStatusMsg     = ""
-    _FootMsg           = ["Nav","Scan","Info","Back","TryConnect"]
+    _FootMsg           = ["Nav","Info","Scan","Back","TryConnect"]
     _Scroller          = None
-    _ListFontObj       = fonts["notosanscjk15"]
+    _ListFontObj       = MyLangManager.TrFont("notosanscjk15")
 
     _InfoPage          = None
     
@@ -396,9 +387,11 @@ class BluetoothPage(Page):
     
     _Offline = False
     
+    _Leader = None
+    
     def __init__(self):
         Page.__init__(self)
-        self._WirelessList = []
+        self._MyList = []
         self._CanvasHWND = None
     
     def ShowBox(self,msg):
@@ -504,7 +497,7 @@ class BluetoothPage(Page):
         self._Screen.SwapAndShow()
         
     def ShutDownConnecting(self):
-        print("Shutdownconnecting...")
+        print("Bluetooth Shutdown connecting...")
     
     def AbortedAndReturnToUpLevel(self):
         self.HideBox()
@@ -520,10 +513,10 @@ class BluetoothPage(Page):
     def TryConnect(self):
         global bus
         
-        if self._PsIndex >= len(self._WirelessList):
+        if self._PsIndex >= len(self._MyList):
             return
         
-        cur_li = self._WirelessList[self._PsIndex]
+        cur_li = self._MyList[self._PsIndex]
         print(cur_li._Path)
         
         if "Connected" in cur_li._Atts:
@@ -536,13 +529,18 @@ class BluetoothPage(Page):
         self._Screen._FootBar.UpdateNavText("Connecting")
         self.ShowBox(MyLangManager.Tr("Connecting"))
         
+        self._Leader._MyAgent.device_obj = dev
+        self._Leader._MyAgent.dev_path = cur_li._Path
+        
         try:
-            dev.Connect()
+            dev.Pair(reply_handler=self._Leader._MyAgent.pair_reply, 
+                                error_handler=self._Leader._MyAgent.pair_error,timeout=60000)
         except Exception,e:
             print(str(e))        
         
-        self.HideBox()
-        self._Screen._FootBar.ResetNavText()
+        
+        #self.HideBox()
+        #self._Screen._FootBar.ResetNavText()
         
     def RefreshDevices(self):
         global devices
@@ -562,7 +560,7 @@ class BluetoothPage(Page):
         
     
     def GenNetworkList(self):
-        self._WirelessList = []
+        self._MyList = []
         start_x = 0
         start_y = 0
         
@@ -586,7 +584,7 @@ class BluetoothPage(Page):
             ni.Init(v,self._Devices[v])
             
             counter += 1
-            self._WirelessList.append(ni)
+            self._MyList.append(ni)
 
         self._PsIndex = 0   
     
@@ -601,7 +599,7 @@ class BluetoothPage(Page):
         proxy_obj = self._Dbus.get_object("org.bluez", "/org/bluez/" + self._ADAPTER_DEV)
         adapter_props = dbus.Interface(proxy_obj,"org.freedesktop.DBus.Properties")
         discoverying = adapter_props.Get("org.bluez.Adapter1", "Discovering") 
-        print(discoverying)
+        print("discoverying", discoverying)
         
         
         if self._Adapter!= None:
@@ -613,7 +611,11 @@ class BluetoothPage(Page):
             try:
                 self._Adapter.StartDiscovery()
             except Exception,e:
-                print(str(e))
+                err_name = e.get_dbus_name()
+                if err_name == "org.freedesktop.DBus.Error.NoReply":
+                    print("start discovery timeout")
+                else:
+                    print("start discovery unknown err: ", str(e))
             
     def OnReturnBackCb(self):
         self.RefreshDevices()
@@ -631,34 +633,10 @@ class BluetoothPage(Page):
                 self.GenNetworkList()
         else:
             self._Offline = True
-        
-    def ScrollUp(self):
-        if len(self._WirelessList) == 0:
-            return
-        self._PsIndex-=1
-        if self._PsIndex < 0:
-            self._PsIndex = 0
-        
-        cur_ni = self._WirelessList[self._PsIndex]
-        if cur_ni._PosY < 0:
-            for i in range(0,len(self._WirelessList)):
-                self._WirelessList[i]._PosY += self._WirelessList[i]._Height
             
-    def ScrollDown(self):
-        if len(self._WirelessList) == 0:
-            return
-        self._PsIndex+=1
-        if self._PsIndex >= len(self._WirelessList):
-            self._PsIndex = len(self._WirelessList) -1
-       
-        cur_ni = self._WirelessList[self._PsIndex]
-        if cur_ni._PosY + cur_ni._Height > self._Height:
-            for i in range(0,len(self._WirelessList)):
-                self._WirelessList[i]._PosY -= self._WirelessList[i]._Height
-    
     def KeyDown(self,event):
         
-        if event.key == CurKeys["A"] or event.key == CurKeys["Menu"]:
+        if IsKeyMenuOrB(event.key):
             if self._Offline == True:
                 self.AbortedAndReturnToUpLevel()
                 return
@@ -698,55 +676,97 @@ class BluetoothPage(Page):
                 self.Rescan()   
 
         if event.key == CurKeys["Y"]:
-            if len(self._WirelessList) == 0:
+            if len(self._MyList) == 0:
                 return
             if self._Offline == True:
                 return
             
-            self._InfoPage._AList = self._WirelessList[self._PsIndex]._Atts
-            self._InfoPage._Path  = self._WirelessList[self._PsIndex]._Path
+            self._InfoPage._AList = self._MyList[self._PsIndex]._Atts
+            self._InfoPage._Path  = self._MyList[self._PsIndex]._Path
             self._Screen.PushPage(self._InfoPage)
             self._Screen.Draw()
             self._Screen.SwapAndShow()
             
-        if event.key == CurKeys["B"]:
+        if IsKeyStartOrA(event.key):
             if self._Offline == False:
                 self.TryConnect()
 
     def Draw(self):
         self.ClearCanvas()
-        if len(self._WirelessList) == 0:
+        if len(self._MyList) == 0:
             return
                 
-        if len(self._WirelessList) * NetItem._Height > self._Height:
+        if len(self._MyList) * NetItem._Height > self._Height:
             self._Ps._Width = self._Width - 11
             self._Ps.Draw()
             
-            for i in self._WirelessList:
+            for i in self._MyList:
                 i.Draw()        
             
-            self._Scroller.UpdateSize( len(self._WirelessList)*NetItem._Height, self._PsIndex*NetItem._Height)
+            self._Scroller.UpdateSize( len(self._MyList)*NetItem._Height, self._PsIndex*NetItem._Height)
             self._Scroller.Draw()
         else:
             self._Ps._Width = self._Width
             self._Ps.Draw()
 
-            for i in self._WirelessList:
+            for i in self._MyList:
                 i.Draw()
 
 
 
-
-
-
-
+BUS_NAME = 'org.bluez'
+AGENT_INTERFACE = 'org.bluez.Agent1'
+AGENT_PATH = "/gameshell/bleagent"
 
 class APIOBJ(object):
 
     _Page = None
-    def __init__(self):
-        pass
+    _PairPage = None
+    _Page3 = None
+    _Prompts = {} # string key,string value
+    _PromptType = None
+    _MyAgent = None
     
+    def __init__(self):
+        self._Prompts["PIN"]=""
+        self._Prompts["PASS"]=""
+
+    def OnKbdReturnBackCb(self):
+        if self._PromptType == None:
+            return
+        else:
+            if self._PromptType in self._Prompts:
+                inputed = "".join(self._Page3._Textarea._MyWords)
+                self._Prompts[self._PromptType] = inputed
+            
+            self._PromptType = None ##clear 
+                
+        
+    def Ask(self,prompt,prompt_type=None):
+        
+        self._Screen.PushPage(self._Page3)
+        self._Page3.SetPassword("")
+        self._Page3._Name = prompt
+        self._Page3._Caller = self
+        
+        self._Screen.Draw()
+        self._Screen.SwapAndShow()
+        
+        if prompt_type != None:
+            self._PromptType = prompt_type
+        
+    def RegisterMyAgent(self):
+        global AGENT_PATH, bus,devices,adapter
+        
+        capability = "KeyboardDisplay"
+        self._MyAgent = BleAgent(bus, AGENT_PATH)
+        self._MyAgent._Leader = self
+        
+        obj = bus.get_object(BUS_NAME, "/org/bluez");
+        manager = dbus.Interface(obj, "org.bluez.AgentManager1")
+        manager.RegisterAgent(AGENT_PATH, capability)
+        print("BleAgent %s registered" % AGENT_PATH)
+        
     def Init(self,main_screen):
         global bus,devices,adapter
         
@@ -758,14 +778,28 @@ class APIOBJ(object):
         self._Page._Screen = main_screen
         self._Page._Name ="Bluetooth"
         
+        self._Page._Leader = self
+        
         self._Page.Init()
+        
+        self._PairPage = BleAgentPairPage()
+        self._PairPage._Screen = main_screen
+        self._PairPage._Name = "Bluetooth"
+        self._PairPage.Init()
+        
+        self._Page3= Keyboard()
+        self._Page3._Name = "Enter"
+        self._Page3._Screen = main_screen
+        self._Page3.Init()
         
         bus.add_signal_receiver(self._Page.DbusPropertiesChanged,
             dbus_interface = "org.freedesktop.DBus.Properties",
             signal_name = "PropertiesChanged",
             arg0 = "org.bluez.Device1",
             path_keyword = "path")
-            
+        
+        self.RegisterMyAgent()
+        
     def API(self,main_screen):
         if main_screen !=None:
             main_screen.PushPage(self._Page)

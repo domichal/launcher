@@ -9,13 +9,12 @@ import gobject
 
 ## local UI import
 from UI.page  import Page
-from UI.constants import ICON_TYPES,Width,Height,RUNEVT
+from UI.constants import ICON_TYPES,Width,Height,RUNEVT,RUNSH
 from UI.icon_item import IconItem
 from UI.icon_pool import MyIconPool
 from UI.label  import Label
-from UI.fonts  import fonts
 from UI.util_funcs import midRect,CmdClean,get_git_revision_short_hash
-from UI.keys_def import CurKeys
+from UI.keys_def import CurKeys, IsKeyStartOrA, IsKeyMenuOrB
 from UI.confirm_page import ConfirmPage
 from UI.download     import Download
 from UI.download_process_page import DownloadProcessPage
@@ -111,16 +110,15 @@ class UpdateConfirmPage(ConfirmPage):
     
     def KeyDown(self,event):
         global LauncherLoc
-        if event.key == CurKeys["Menu"] or event.key == CurKeys["A"]:
+        if IsKeyMenuOrB(event.key):
             self.ReturnToUpLevelPage()
             self._Screen.Draw()
             self._Screen.SwapAndShow()
             
-        if event.key == CurKeys["B"]:
+        if IsKeyStartOrA(event.key):
             if self._GIT == True:
-                cmdpath = "feh --bg-center %s/sys.py/gameshell/wallpaper/updating.png; cd %s ;git pull; git reset --hard %s ; feh --bg-center %s/sys.py/gameshell/wallpaper/loading.png " % (LauncherLoc,LauncherLoc,self._Version,LauncherLoc)
-                pygame.event.post( pygame.event.Event(RUNEVT, message=cmdpath))
-                self._GIT = False
+                cmdpath = "%s/update.sh %s" % (LauncherLoc,self._Version)
+                pygame.event.post( pygame.event.Event(RUNSH, message=cmdpath))
                 return
             
             if self._DownloadPage == None:
@@ -156,9 +154,9 @@ class UpdateConfirmPage(ConfirmPage):
 
 class UpdatePage(Page):
     _Icons = {}
-    _FootMsg = ["Nav","Check Update","","Back",""]
+    _FootMsg = ["Nav","","Check Update","Back",""]
 
-    _ListFontObj = fonts["varela15"]    
+    _ListFontObj = MyLangManager.TrFont("varela15")    
     _ConfirmPage = None
     _AList    = {}
     _MyList   = []
@@ -178,7 +176,7 @@ class UpdatePage(Page):
             li._PosY   = start_y + i*InfoPageListItem._Height
             li._Width  = Width
             li._Fonts["normal"] = self._ListFontObj
-            li._Fonts["small"] = fonts["varela12"]
+            li._Fonts["small"] = MySkinManager.GiveFont("varela12")
             
             if self._AList[v]["label"] != "":
                 li.Init(  self._AList[v]["label"] )
@@ -278,7 +276,7 @@ class UpdatePage(Page):
         pass
 
     def KeyDown(self,event):
-        if event.key == CurKeys["Menu"] or event.key == CurKeys["A"]:
+        if IsKeyMenuOrB(event.key):
             self.ReturnToUpLevelPage()
             self._Screen.Draw()
             self._Screen.SwapAndShow()
@@ -316,7 +314,7 @@ class APIOBJ(object):
         self._UpdatePage = UpdatePage()
 
         self._UpdatePage._Screen = main_screen
-        self._UpdatePage._Name = "Update"
+        self._UpdatePage._Name = "Update Launcher"
         self._UpdatePage.Init()
         
     def API(self,main_screen):

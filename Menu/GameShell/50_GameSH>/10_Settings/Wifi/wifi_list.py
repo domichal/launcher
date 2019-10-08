@@ -10,9 +10,8 @@ from wicd import misc
 from UI.constants import Width,Height
 from UI.page   import Page,PageSelector
 from UI.label  import Label
-from UI.fonts  import fonts
 from UI.util_funcs import midRect,SwapAndShow
-from UI.keys_def   import CurKeys
+from UI.keys_def   import CurKeys, IsKeyStartOrA, IsKeyMenuOrB
 from UI.scroller   import ListScroller
 from UI.confirm_page import ConfirmPage
 from UI.skin_manager import MySkinManager
@@ -32,12 +31,12 @@ class WifiDisconnectConfirmPage(ConfirmPage):
     _ConfirmText = MyLangManager.Tr("ConfirmDisconnectQ")
     
     def KeyDown(self,event):
-        if event.key == CurKeys["Menu"] or event.key == CurKeys["A"]:
+        if IsKeyMenuOrB(event.key):
             self.ReturnToUpLevelPage()
             self._Screen.Draw()
             self._Screen.SwapAndShow()
             
-        if event.key == CurKeys["B"]:
+        if IsKeyStartOrA(event.key):
             self.SnapMsg(MyLangManager.Tr("Disconnecting"))
             self._Screen.Draw()
             self._Screen.SwapAndShow()
@@ -60,7 +59,7 @@ class WifiDisconnectConfirmPage(ConfirmPage):
         self.Reset()
         
 class WifiInfoPage(Page):
-    _FootMsg =  ["Nav","Disconnect","","Back",""]
+    _FootMsg =  ["Nav","","","Back",""]
     _MyList = []
     _ListFontObj = MyLangManager.TrFont("varela15")
 
@@ -94,7 +93,7 @@ class WifiInfoPage(Page):
             li._PosY   = start_y + i*InfoPageListItem._Height
             li._Width  = Width
             li._Fonts["normal"] = self._ListFontObj
-            li._Fonts["small"] = fonts["varela12"]
+            li._Fonts["small"] = MyLangManager.TrFont("varela12")
             
             if self._AList[v]["label"] != "":
                 li.Init(  self._AList[v]["label"] )
@@ -142,30 +141,6 @@ class WifiInfoPage(Page):
         self._DisconnectConfirmPage._Name   = "Confirm Disconnect"
         self._DisconnectConfirmPage._Parent = self
         self._DisconnectConfirmPage.Init()
-        
-    def ScrollUp(self):
-        if len(self._MyList) == 0:
-            return
-        self._PsIndex -= 1
-        if self._PsIndex < 0:
-            self._PsIndex = 0
-        cur_li = self._MyList[self._PsIndex]
-        if cur_li._PosY < 0:
-            for i in range(0, len(self._MyList)):
-                self._MyList[i]._PosY += self._MyList[i]._Height
-        
-
-    def ScrollDown(self):
-        if len(self._MyList) == 0:
-            return
-        self._PsIndex +=1
-        if self._PsIndex >= len(self._MyList):
-            self._PsIndex = len(self._MyList) -1
-
-        cur_li = self._MyList[self._PsIndex]
-        if cur_li._PosY +cur_li._Height > self._Height:
-            for i in range(0,len(self._MyList)):
-                self._MyList[i]._PosY -= self._MyList[i]._Height
 
     def Click(self):
         cur_li = self._MyList[self._PsIndex]
@@ -183,9 +158,9 @@ class WifiInfoPage(Page):
     def OnLoadCb(self):
         if self._Wireless.GetCurrentNetworkID(self._Wireless.GetIwconfig()) == self._NetworkId \
            and self._Wireless.GetWirelessIP('') is not None:
-            self._FootMsg[1] = "Disconnect"
+            self._FootMsg[2] = "Disconnect"
         else:
-            self._FootMsg[1] =  ""
+            self._FootMsg[2] =  ""
 
         self.GenList()
 
@@ -195,7 +170,7 @@ class WifiInfoPage(Page):
         self._Screen.SwapAndShow()
         
     def KeyDown(self,event):
-        if event.key == CurKeys["A"] or event.key == CurKeys["Menu"]:
+        if IsKeyMenuOrB(event.key):
             self.ReturnToUpLevelPage()
             self._Screen.Draw()
             self._Screen.SwapAndShow()
@@ -210,7 +185,7 @@ class WifiInfoPage(Page):
             self._Screen.SwapAndShow()
         
 
-        if event.key == CurKeys["Enter"]:
+        if IsKeyStartOrA(event.key):
             self.Click()
 
         if event.key == CurKeys["X"]:
@@ -230,9 +205,7 @@ class WifiListSelector(PageSelector):
     _BackgroundColor = MySkinManager.GiveColor('Front')
 
     def __init__(self):
-        self._PosX = 0
-        self._PosY = 0
-        self._Height = 0
+        pass
 
     def AnimateDraw(self,x2,y2):
         pass 
@@ -240,10 +213,10 @@ class WifiListSelector(PageSelector):
 
     def Draw(self):
         idx = self._Parent._PsIndex
-        if idx < len( self._Parent._WirelessList):
-            x = self._Parent._WirelessList[idx]._PosX+11
-            y = self._Parent._WirelessList[idx]._PosY+1
-            h = self._Parent._WirelessList[idx]._Height -3
+        if idx < len( self._Parent._MyList):
+            x = self._Parent._MyList[idx]._PosX+11
+            y = self._Parent._MyList[idx]._PosY+1
+            h = self._Parent._MyList[idx]._Height -3
         
             self._PosX = x
             self._PosY = y
@@ -270,7 +243,7 @@ class WifiListMessageBox(Label):
         self._CanvasHWND.blit(my_text,(x,y,w,h))
 
 class WifiList(Page):
-    _WirelessList = []
+    _MyList = []
     #Wicd dbus part
     _Wireless = None
     _Daemon   = None
@@ -290,17 +263,17 @@ class WifiList(Page):
     _BlockCb           = None
     
     _LastStatusMsg     = ""
-    _FootMsg           = ["Nav","Scan","Info","Back","Enter"]
+    _FootMsg           = ["Nav","Info","Scan","Back","Enter"]
     _EncMethods        = None
     _Scroller          = None
-    _ListFontObj       = fonts["notosanscjk15"]
+    _ListFontObj       = MyLangManager.TrFont("notosanscjk15")
 
     _InfoPage          = None
     _CurBssid          = ""
     
     def __init__(self):
         Page.__init__(self)
-        self._WirelessList = []
+        self._MyList = []
         self._CanvasHWND = None
     
     def ShowBox(self,msg):
@@ -317,7 +290,7 @@ class WifiList(Page):
         self._Screen.SwapAndShow()
 
     def GenNetworkList(self):
-        self._WirelessList = []
+        self._MyList = []
         start_x = 0
         start_y = 0
 
@@ -336,7 +309,7 @@ class WifiList(Page):
             #ni._Bssid   = self._Wireless.GetWirelessProperty(network_id,"bssid")
             
             ni.Init(network_id,is_active)
-            self._WirelessList.append(ni)
+            self._MyList.append(ni)
 
         self._PsIndex = 0
         
@@ -397,8 +370,8 @@ class WifiList(Page):
         if info != None:
             if len(info) > 3:
                 _id  = int(info[3])
-                if _id < len(self._WirelessList):
-                    self._WirelessList[_id].UpdateStrenLabel( str(info[2]))
+                if _id < len(self._MyList):
+                    self._MyList[_id].UpdateStrenLabel( str(info[2]))
 
         self._PrevWicdState = state
         
@@ -521,7 +494,7 @@ class WifiList(Page):
         
         netid = self._PsIndex
         
-        for i,v in enumerate(self._WirelessList):
+        for i,v in enumerate(self._MyList):
             if v._Bssid == self._CurBssid:
                 netid = i
                 break
@@ -550,7 +523,7 @@ class WifiList(Page):
 
         self.ShowBox(MyLangManager.Tr("Connecting"))
         
-        self._WirelessList[netid].Connect()
+        self._MyList[netid].Connect()
         print("after Connect")
         self.UpdateStatus()
 
@@ -584,31 +557,6 @@ class WifiList(Page):
         """
         return results
 
-    def ScrollUp(self):
-        if len(self._WirelessList) == 0:
-            return
-        self._PsIndex-=1
-        if self._PsIndex < 0:
-            self._PsIndex = 0
-        
-        cur_ni = self._WirelessList[self._PsIndex]
-        if cur_ni._PosY < 0:
-            for i in range(0,len(self._WirelessList)):
-                self._WirelessList[i]._PosY += self._WirelessList[i]._Height
-            
-    def ScrollDown(self):
-        if len(self._WirelessList) == 0:
-            return
-        self._PsIndex+=1
-        if self._PsIndex >= len(self._WirelessList):
-            self._PsIndex = len(self._WirelessList) -1
-       
-        cur_ni = self._WirelessList[self._PsIndex]
-        if cur_ni._PosY + cur_ni._Height > self._Height:
-            for i in range(0,len(self._WirelessList)):
-                self._WirelessList[i]._PosY -= self._WirelessList[i]._Height
-    
-
     def AbortedAndReturnToUpLevel(self):
         self.HideBox()
         self._Screen._FootBar.ResetNavText()
@@ -620,7 +568,23 @@ class WifiList(Page):
         password_inputed = "".join(myvars.PasswordPage._Textarea._MyWords)
         if is_wifi_connected_now() == False:
             self.ConfigWireless(password_inputed)
-            
+        else:
+            for i in range(0,10):
+                if is_wifi_connected_now() == True:
+                    self.ShowBox(MyLangManager.Tr("Launching"))
+                    self._Daemon.Disconnect()
+                    self._Daemon.SetForcedDisconnect(True)
+                    self._Connecting = False
+                else:
+                    break
+                
+                pygame.time.delay(100)
+                
+            if is_wifi_connected_now() == False:
+                self.ConfigWireless(password_inputed)
+            else:
+                self.ShowBox(MyLangManager.Tr("Disconnect first"))
+        
     def OnReturnBackCb(self):
         pass
         
@@ -631,7 +595,7 @@ class WifiList(Page):
 #            print("UI blocking ...")
 #            return
         
-        if event.key == CurKeys["A"] or event.key == CurKeys["Menu"]:
+        if IsKeyMenuOrB(event.key):
             if self._Wireless != None:
                 wireless_connecting = self._Wireless.CheckIfWirelessConnecting()
                 if wireless_connecting:
@@ -656,14 +620,14 @@ class WifiList(Page):
             self._Screen.Draw()
             self._Screen.SwapAndShow()
             
-        if event.key == CurKeys["Enter"]: ## enter to set password,enter is B on GM
-            if len(self._WirelessList) == 0:
+        if IsKeyStartOrA(event.key): ## enter to set password,enter is B on GM
+            if len(self._MyList) == 0:
                 return
             
-            self._CurBssid = self._WirelessList[self._PsIndex]._Bssid
+            self._CurBssid = self._MyList[self._PsIndex]._Bssid
             
             wicd_wirelss_encrypt_pwd = self.GetWirelessEncrypt(self._PsIndex)
-            if self._WirelessList[self._PsIndex]._IsActive:
+            if self._MyList[self._PsIndex]._IsActive:
                 self.ShowBox( self._Wireless.GetWirelessIP('')    )
             else:
                 self._Screen.PushCurPage()
@@ -673,8 +637,8 @@ class WifiList(Page):
                 for i in wicd_wirelss_encrypt_pwd:
                     if "preshared_key" in i:
                         if i["preshared_key"] != None:
-                            if len(i["preshared_key"]) > 0:
-                                thepass = i["preshared_key"]
+                            if len(str(i["preshared_key"])) > 0:
+                                thepass = str(i["preshared_key"])
                                 break
                 
                 myvars.PasswordPage.SetPassword(thepass)
@@ -693,7 +657,7 @@ class WifiList(Page):
             self.Rescan(False)
             
         if event.key == CurKeys["Y"]:
-            if len(self._WirelessList) == 0:
+            if len(self._MyList) == 0:
                 return
 
             self._InfoPage._NetworkId = self._PsIndex
@@ -756,19 +720,19 @@ class WifiList(Page):
 
         self._InfoPage = WifiInfoPage()
         self._InfoPage._Screen = self._Screen
-        self._InfoPage._Name   = "Wifi info"
+        self._InfoPage._Name   = MyLangManager.Tr("Wifi info")
         self._InfoPage.Init()
         
     def Draw(self):
         self.ClearCanvas()
 
-        if len(self._WirelessList) == 0:
+        if len(self._MyList) == 0:
             return
         
         self._Ps.Draw()
-        for i in self._WirelessList:
+        for i in self._MyList:
             i.Draw()
 
         
-        self._Scroller.UpdateSize( len(self._WirelessList)*NetItem._Height, self._PsIndex*NetItem._Height)
+        self._Scroller.UpdateSize( len(self._MyList)*NetItem._Height, self._PsIndex*NetItem._Height)
         self._Scroller.Draw()

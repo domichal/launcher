@@ -1,15 +1,15 @@
 # -*- coding: utf-8 -*- 
 import pygame
 import validators
+import  commands
 
 from UI.constants import Width,Height,ICON_TYPES
 from UI.simple_name_space import SimpleNamespace
 from UI.page  import Page
 from UI.label  import Label
-from UI.fonts  import fonts
 from UI.icon_item import IconItem
 from UI.icon_pool import MyIconPool
-from UI.keys_def  import CurKeys
+from UI.keys_def  import CurKeys, IsKeyMenuOrB
 from UI.skin_manager import MySkinManager
 from UI.lang_manager import MyLangManager
 
@@ -19,7 +19,7 @@ class TinyCloudPage(Page):
     _FootMsg =  ["Nav","","","Back",""]
     _MyList = []
     
-    _ListFontObj = fonts["varela13"]
+    _ListFontObj = MyLangManager.TrFont("varela13")
     
     _AList = {}
     _Labels = {}
@@ -117,6 +117,10 @@ class TinyCloudPage(Page):
         else:
             self._IP = "xxx.xxx.xxx.xxx"
         
+        hostname = commands.getstatusoutput("hostname")[1]
+        if hostname == "":
+            hostname = "clockworkpi"
+                    
         labels = \
         [["forssh","For ssh and scp:",self._ListFontObj,self._TextColor],
          ["ssh_addr","ssh cpi@%s" % self._IP, self._ListFontObj,self._URLColor],
@@ -127,7 +131,7 @@ class TinyCloudPage(Page):
          ["forKey",     "Key:",                    self._ListFontObj, self._TextColor],
          ["key_and_pass", "cpi",                   self._ListFontObj, self._URLColor],
          ["for_airplay", "Airplay:",               self._ListFontObj, self._TextColor],
-         ["airplay_name","clockworkpi",            self._ListFontObj, self._URLColor],
+         ["airplay_name",hostname,            self._ListFontObj, self._URLColor],
          ["for-usb-eth","USB-Ethernet:",            self._ListFontObj, self._TextColor],
          ["usb-eth-addr","192.168.10.1",            self._ListFontObj, self._URLColor]]
 
@@ -156,7 +160,7 @@ class TinyCloudPage(Page):
         self._PngSize["online"] = (75,122)
         
         bgpng = IconItem()
-        bgpng._ImgSurf = MyIconPool._Icons["needwifi_bg"]
+        bgpng._ImgSurf = MyIconPool.GiveIconSurface("needwifi_bg")
         bgpng._MyType = ICON_TYPES["STAT"]
         bgpng._Parent = self
         bgpng.Adjust(0,0,self._PngSize["bg"][0],self._PngSize["bg"][1],0)
@@ -164,7 +168,7 @@ class TinyCloudPage(Page):
         self._Icons["bg"] = bgpng
         
         onlinepng = IconItem()
-        onlinepng._ImgSurf = MyIconPool._Icons["online"]
+        onlinepng._ImgSurf = MyIconPool.GiveIconSurface("online")
         onlinepng._MyType = ICON_TYPES["STAT"]
         onlinepng._Parent = self
         onlinepng.Adjust(0,0,self._PngSize["online"][0], self._PngSize["online"][1],0)
@@ -174,12 +178,10 @@ class TinyCloudPage(Page):
         self.SetLabels()
 
     def KeyDown(self,event):
-        if event.key == CurKeys["A"] or event.key == CurKeys["Menu"]:
-            if self._FootMsg[3] == "Back":
-                self.ReturnToUpLevelPage()
-                self._Screen.Draw()
-                self._Screen.SwapAndShow()
-            return
+        if IsKeyMenuOrB(event.key):
+            self.ReturnToUpLevelPage()
+            self._Screen.Draw()
+            self._Screen.SwapAndShow()
         
     def Draw(self):
         if self._DrawOnce == False:

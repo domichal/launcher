@@ -15,9 +15,8 @@ from libs.roundrects import aa_round_rect
 from UI.constants import Width,Height,ICON_TYPES
 from UI.page   import Page,PageSelector
 from UI.label  import Label
-from UI.fonts  import fonts
 from UI.util_funcs import midRect,FileExists,IsExecutable
-from UI.keys_def   import CurKeys
+from UI.keys_def   import CurKeys, IsKeyStartOrA, IsKeyMenuOrB
 from UI.scroller   import ListScroller
 from UI.icon_pool  import MyIconPool
 from UI.icon_item  import IconItem
@@ -45,7 +44,7 @@ class NotifyJobListItem(InfoPageListItem):
         self._Labels["Text"] = l    
         
         done_icon = IconItem()
-        done_icon._ImgSurf = MyIconPool._Icons["done"]
+        done_icon._ImgSurf = MyIconPool.GiveIconSurface("done")
         done_icon._CanvasHWND = self._Parent._CanvasHWND
         done_icon._Parent = self
         
@@ -126,7 +125,7 @@ class NotificationPage(Page):
                 li._PosY   = start_y + counter*InfoPageListItem._Height
                 li._Width  = Width-10
                 li._Fonts["normal"] = self._ListFontObj
-                li._Fonts["small"] = fonts["varela12"]
+                li._Fonts["small"] = MySkinManager.GiveFont("varela12")
                 
                 if IsExecutable(v):
                     li._ReadOnly = True
@@ -168,29 +167,6 @@ class NotificationPage(Page):
         self._Scroller._PosY = 2
         self._Scroller.Init()
         
-    def ScrollDown(self):
-        if len(self._MyList) == 0:
-            return
-        self._PsIndex +=1
-        if self._PsIndex >= len(self._MyList):
-            self._PsIndex = len(self._MyList) -1
-
-        cur_li = self._MyList[self._PsIndex]
-        if cur_li._PosY +cur_li._Height > self._Height:
-            for i in range(0,len(self._MyList)):
-                self._MyList[i]._PosY -= self._MyList[i]._Height
-        
-    def ScrollUp(self):
-        if len(self._MyList) == 0:
-            return
-        self._PsIndex -= 1
-        if self._PsIndex < 0:
-            self._PsIndex = 0
-        cur_li = self._MyList[self._PsIndex]
-        if cur_li._PosY < 0:
-            for i in range(0, len(self._MyList)):
-                self._MyList[i]._PosY += self._MyList[i]._Height
-
     def Click(self):
         if len(self._MyList) == 0:
             return
@@ -217,12 +193,12 @@ class NotificationPage(Page):
         self._Screen.SwapAndShow()
         
     def KeyDown(self,event):
-        if event.key == CurKeys["A"] or event.key == CurKeys["Menu"]:
+        if IsKeyMenuOrB(event.key):
             self.ReturnToUpLevelPage()
             self._Screen.Draw()
             self._Screen.SwapAndShow()
 
-        if event.key == CurKeys["B"]:
+        if IsKeyStartOrA(event.key):
             
             self._Screen._MsgBox.SetText("Applying")
             self._Screen._MsgBox.Draw()

@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*- 
-
+import platform
 import pygame
 import os
 import subprocess
@@ -12,23 +12,6 @@ import subprocess
 import string
 from Xlib import X,display
 import config
-
-def SkinMap(orig_file_or_dir):
-    DefaultSkin = "default"
-    
-    if orig_file_or_dir.startswith(".."):
-        ret  = orig_file_or_dir.replace("..","../skin/"+config.SKIN)
-        if FileExists(ret) == False:
-            ret = orig_file_or_dir.replace("..","../skin/"+DefaultSkin)
-    else:
-        ret = "../skin/"+config.SKIN+"/sys.py/"+orig_file_or_dir
-        if FileExists(ret) == False:
-            ret = "../skin/"+DefaultSkin+"/sys.py/"+orig_file_or_dir
-        
-    if FileExists( ret ):
-        return ret
-    else:  ## if not existed both in default or custom skin ,return where it is
-        return orig_file_or_dir
 
 def get_git_revision_hash():
     return subprocess.check_output(['git', 'rev-parse', 'HEAD'])
@@ -127,3 +110,14 @@ def DrawText(canvas,text, x,y,width,height,canWidth,canHeight,fontObj):# text fo
 
 def SwapAndShow():
     pygame.display.update()
+
+def ArmSystem(cmd):
+    if "arm" not in platform.machine():
+        return
+    os.system(cmd)
+
+def InGameShell():
+    if "arm" not in platform.machine():
+        return True
+    else:
+        return False

@@ -8,9 +8,8 @@ from libs import easing
 from UI.constants  import Width,Height,ICON_TYPES
 from UI.page   import Page,PageSelector
 from UI.label  import Label
-from UI.fonts  import fonts
 from UI.util_funcs import midRect
-from UI.keys_def import CurKeys
+from UI.keys_def import CurKeys, IsKeyStartOrA, IsKeyMenuOrB
 from UI.icon_item import IconItem
 from UI.icon_pool    import MyIconPool
 from UI.skin_manager import MySkinManager
@@ -23,10 +22,6 @@ from text_item import TextItem
 import myvars
 
 class KeyboardIcon(IconItem):
-    _PosX = 0
-    _PosY = 0
-    _Width = 0
-    _Height = 0
     _Color = MySkinManager.GiveColor('Text')
     _MyType  = ICON_TYPES["NAV"] 
     _Parent  = None
@@ -57,10 +52,6 @@ class KeyboardSelector(PageSelector):
 #        pygame.draw.rect(self._Parent._CanvasHWND,(0,0,0),rect,1)
 
 class Keyboard(Page):
-    _PosX = 0
-    _PosY = 0
-    _Width = 0
-    _Height = 0
     _SectionNumbers = 3
     _SectionIndex = 1
 
@@ -71,7 +62,7 @@ class Keyboard(Page):
     _Textarea = None
     _Selector = None
     _LeftOrRight = 1
-    _FootMsg           = ["Nav.","ABC","Done","Backspace","Enter"]
+    _FootMsg           = ["Nav.","Done","ABC","Backspace","Enter"]
 
     _RowIndex    = 0
     _Caller   = None
@@ -116,7 +107,7 @@ class Keyboard(Page):
         self._Width = self._Screen._Width
         self._Height = self._Screen._Height
         
-        fontobj = fonts["veramono24"]
+        fontobj = MySkinManager.GiveFont("veramono24")
         word_margin = 15
 
         start_x = (self._Width - fontobj.size( "".join(self._Secs[0][0]))[0]-len(self._Secs[0][0])*word_margin)/2+word_margin/2
@@ -137,7 +128,7 @@ class Keyboard(Page):
 
                     if val == "_L" or val == "_R":
                         it  = KeyboardIcon()
-                        it._ImgSurf = MyIconPool._Icons[val]
+                        it._ImgSurf = MyIconPool.GiveIconSurface(val)
                         it._Parent = self
                         it._Str = val
                         it.Init(start_x+it._ImgSurf.get_width()/2  ,start_y,it._ImgSurf.get_width(),it._ImgSurf.get_height(),0)
@@ -149,7 +140,7 @@ class Keyboard(Page):
                     else:
                         if val == "_S":
                             val = "Space"
-                            ti._FontObj = fonts["veramono15"]
+                            ti._FontObj = MySkinManager.GiveFont("veramono15")
                             ti._Bold = True
                         
                         cur_alpha_size  = ti._FontObj.size( val)
@@ -299,7 +290,7 @@ class Keyboard(Page):
             self.SelectNextChar()
         if event.key == CurKeys["Left"]:
             self.SelectPrevChar()
-        if event.key == CurKeys["B"] or event.key == CurKeys["Enter"]:
+        if IsKeyStartOrA(event.key):
             self.ClickOnChar()
         if event.key == CurKeys["X"]:
             if self._SectionIndex <= 0:
@@ -325,7 +316,7 @@ class Keyboard(Page):
                         self._Caller.OnKbdReturnBackCb()
             #Uplevel page  invokes OnReturnBackCb,eg: ConfigWireless
 
-        if event.key == CurKeys["A"]:
+        if event.key == CurKeys["B"]:
             self._Textarea.RemoveFromLastText()
             self._Textarea.Draw()
             self._Screen.SwapAndShow()

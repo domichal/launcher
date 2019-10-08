@@ -11,9 +11,6 @@ class InfoPageSelector(PageSelector):
     _BackgroundColor = MySkinManager.GiveColor('Front')
 
     def __init__(self):
-        self._PosX = 0
-        self._PosY = 0
-        self._Height = 0
         self._Width  = Width
 
     def AnimateDraw(self,x2,y2):
@@ -21,7 +18,7 @@ class InfoPageSelector(PageSelector):
 
     def Draw(self):
         idx = self._Parent._PsIndex
-        if idx < len(self._Parent._MyList):
+        if idx >= 0 and idx < len(self._Parent._MyList):
             y = self._Parent._MyList[idx]._PosY+1
             h = self._Parent._MyList[idx]._Height -3
             

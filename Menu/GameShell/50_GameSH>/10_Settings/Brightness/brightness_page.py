@@ -10,9 +10,8 @@ from UI.constants import Width,Height,ICON_TYPES
 from UI.page   import Page,PageSelector
 from UI.label  import Label
 from UI.icon_item import IconItem
-from UI.fonts  import fonts
 from UI.util_funcs import midRect
-from UI.keys_def   import CurKeys
+from UI.keys_def   import CurKeys, IsKeyMenuOrB
 from UI.slider     import Slider
 from UI.icon_pool  import MyIconPool
 from UI.multi_icon_item import MultiIconItem
@@ -40,7 +39,7 @@ class BSlider(Slider):
         self._Height = self._Parent._Height
         
         bgpng = IconItem()
-        bgpng._ImgSurf = MyIconPool._Icons["light"]
+        bgpng._ImgSurf = MyIconPool.GiveIconSurface("light")
         bgpng._MyType = ICON_TYPES["STAT"]
         bgpng._Parent = self
         bgpng.Adjust(0,0,self._BGwidth,self._BGheight,0)
@@ -50,7 +49,7 @@ class BSlider(Slider):
         scale = MultiIconItem()
         scale._MyType = ICON_TYPES["STAT"]
         scale._Parent = self
-        scale._ImgSurf = MyIconPool._Icons["scale"]
+        scale._ImgSurf = MyIconPool.GiveIconSurface("scale")
         scale._IconWidth = 82
         scale._IconHeight = 63
         scale.Adjust(0,0,82,63,0)
@@ -161,7 +160,7 @@ class BrightnessPage(Page):
         
     def KeyDown(self,event):
         
-        if event.key == CurKeys["Menu"] or event.key == CurKeys["A"]:
+        if IsKeyMenuOrB(event.key):
             self.ReturnToUpLevelPage()
             self._Screen.Draw()
             self._Screen.SwapAndShow()

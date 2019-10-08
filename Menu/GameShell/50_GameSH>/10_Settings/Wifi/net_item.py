@@ -5,12 +5,11 @@ import pygame
 ## local UI import
 from UI.page   import Page
 from UI.label  import Label
-from UI.fonts  import fonts
 from UI.icon_item import IconItem
 from UI.multi_icon_item  import MultiIconItem
 from UI.icon_pool   import MyIconPool
 from UI.skin_manager import MySkinManager
-
+from UI.widget      import Widget
 
 class NetItemMultiIcon(MultiIconItem):
     _CanvasHWND = None
@@ -33,10 +32,7 @@ class NetItemIcon(IconItem):
         self._CanvasHWND.blit(self._ImgSurf,(self._PosX,self._PosY+(self._Parent._Height-self._Height)/2,self._Width,self._Height))
 
             
-class NetItem(object):
-    _PosX = 0
-    _PosY = 0
-    _Width = 0
+class NetItem(Widget):
     _Height = 30
 
     _Bssid=""    # 50:3A:A0:51:18:3C
@@ -141,13 +137,13 @@ class NetItem(object):
         
 
         lock_icon = NetItemIcon()
-        lock_icon._ImgSurf = MyIconPool._Icons["lock"]
+        lock_icon._ImgSurf = MyIconPool.GiveIconSurface("lock")
         lock_icon._CanvasHWND = self._Parent._CanvasHWND
         lock_icon._Parent = self
         self._Icons["lock"] = lock_icon
         
         done_icon = NetItemIcon()
-        done_icon._ImgSurf = MyIconPool._Icons["done"]
+        done_icon._ImgSurf = MyIconPool.GiveIconSurface("done")
         done_icon._CanvasHWND = self._Parent._CanvasHWND
         done_icon._Parent = self
         

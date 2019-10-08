@@ -10,15 +10,14 @@ from libs.roundrects import aa_round_rect
 from UI.constants import Width,Height,ICON_TYPES
 from UI.page   import Page,PageSelector
 from UI.label  import Label
-from UI.fonts  import fonts
 from UI.icon_item import IconItem
 from UI.util_funcs import midRect
-from UI.keys_def   import CurKeys
+from UI.keys_def   import CurKeys, IsKeyStartOrA, IsKeyMenuOrB
 from UI.multi_icon_item import MultiIconItem
 from UI.icon_pool           import MyIconPool
 from UI.scroller   import ListScroller
 from UI.skin_manager import MySkinManager
-
+from UI.lang_manager import MyLangManager
 from list_item  import ListItem
 
 
@@ -86,7 +85,7 @@ class TimezoneListPage(Page):
     _FootMsg = ["Nav","","","Back","Select"]
     _MyList = []
     _SwapMyList = []
-    _ListFont = fonts["notosanscjk15"]
+    _ListFont = MyLangManager.TrFont("notosanscjk15")
     _MyStack = None
 
     _Scroller = None
@@ -177,7 +176,7 @@ class TimezoneListPage(Page):
         self.SyncList("/usr/share/zoneinfo/posix")
 
         icon_for_list = MultiIconItem()
-        icon_for_list._ImgSurf = MyIconPool._Icons["sys"]
+        icon_for_list._ImgSurf = MyIconPool.GiveIconSurface("sys")
         icon_for_list._MyType = ICON_TYPES["STAT"]
         icon_for_list._Parent = self
         
@@ -186,10 +185,10 @@ class TimezoneListPage(Page):
 
 
         self._BGpng = IconItem()
-        self._BGpng._ImgSurf = MyIconPool._Icons["empty"]
+        self._BGpng._ImgSurf = MyIconPool.GiveIconSurface("empty")
         self._BGpng._MyType = ICON_TYPES["STAT"]
         self._BGpng._Parent = self
-        self._BGpng.AddLabel("No timezones found on system!", fonts["varela22"])
+        self._BGpng.AddLabel("No timezones found on system!", MyLangManager.TrFont("varela22"))
         self._BGpng.SetLableColor(MySkinManager.GiveColor('Disabled'))
         self._BGpng.Adjust(0,0,self._BGwidth,self._BGheight,0)
 
@@ -200,35 +199,6 @@ class TimezoneListPage(Page):
         self._Scroller._PosY = 2
         self._Scroller.Init()
         
-
-    def ScrollUp(self,Step=1):
-        if len(self._MyList) == 0:
-            return
-        tmp = self._PsIndex
-        self._PsIndex -= Step
-        
-        if self._PsIndex < 0:
-            self._PsIndex = 0
-        dy = tmp-self._PsIndex 
-        cur_li = self._MyList[self._PsIndex]
-        if cur_li._PosY < 0:
-            for i in range(0, len(self._MyList)):
-                self._MyList[i]._PosY += self._MyList[i]._Height*dy
-        
-
-    def ScrollDown(self,Step=1):
-        if len(self._MyList) == 0:
-            return
-        tmp = self._PsIndex
-        self._PsIndex +=Step
-        if self._PsIndex >= len(self._MyList):
-            self._PsIndex = len(self._MyList) -1
-        dy = self._PsIndex - tmp
-        cur_li = self._MyList[self._PsIndex]
-        if cur_li._PosY +cur_li._Height > self._Height:
-            for i in range(0,len(self._MyList)):
-                self._MyList[i]._PosY -= self._MyList[i]._Height*dy
-
     def Click(self):
         if len(self._MyList) == 0:
             return
@@ -259,7 +229,7 @@ class TimezoneListPage(Page):
         
     def KeyDown(self,event):
         
-        if event.key == CurKeys["Menu"] or event.key == CurKeys["A"]:
+        if IsKeyMenuOrB(event.key):
             
             self.ReturnToUpLevelPage()
             self._Screen.Draw()
@@ -275,16 +245,16 @@ class TimezoneListPage(Page):
             self._Screen.SwapAndShow()
         
         if event.key == CurKeys["Right"]:
-            self.ScrollDown(Step=5)
+            self.FScrollDown(Step=5)
             self._Screen.Draw()
             self._Screen.SwapAndShow()
             
         if event.key == CurKeys["Left"]:
-            self.ScrollUp(Step=5)
+            self.FScrollUp(Step=5)
             self._Screen.Draw()
             self._Screen.SwapAndShow()
                                      
-        if event.key == CurKeys["Enter"]:
+        if IsKeyStartOrA(event.key):
             self.Click()
             
     def Draw(self):

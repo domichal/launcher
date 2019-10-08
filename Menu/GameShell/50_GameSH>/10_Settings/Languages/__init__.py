@@ -11,9 +11,8 @@ from libs.roundrects import aa_round_rect
 from UI.constants import Width,Height,ICON_TYPES,RESTARTUI
 from UI.page   import Page,PageSelector
 from UI.label  import Label
-from UI.fonts  import fonts
 from UI.util_funcs import midRect
-from UI.keys_def   import CurKeys
+from UI.keys_def   import CurKeys, IsKeyStartOrA, IsKeyMenuOrB
 from UI.scroller   import ListScroller
 from UI.icon_pool  import MyIconPool
 from UI.icon_item  import IconItem
@@ -77,7 +76,7 @@ class PageListItem(InfoPageListItem):
 class LanguagesPage(Page):
     _FootMsg =  ["Nav","","","Back","Select"]
     _MyList = []
-    _ListFont = fonts["notosanscjk15"]
+    _ListFont = MyLangManager.TrFont("notosanscjk15")
     
     _AList = {}
 
@@ -134,7 +133,7 @@ class LanguagesPage(Page):
         self._Height = self._Screen._Height
 
         done = IconItem()
-        done._ImgSurf = MyIconPool._Icons["done"]
+        done._ImgSurf = MyIconPool.GiveIconSurface("done")
         done._MyType = ICON_TYPES["STAT"]
         done._Parent = self
         self._Icons["done"] = done
@@ -231,12 +230,12 @@ class LanguagesPage(Page):
         self._Screen.SwapAndShow()
         """
     def KeyDown(self,event):
-        if event.key == CurKeys["A"] or event.key == CurKeys["Menu"]:
+        if IsKeyMenuOrB(event.key):
             self.ReturnToUpLevelPage()
             self._Screen.Draw()
             self._Screen.SwapAndShow()
 
-        if event.key == CurKeys["B"]:
+        if IsKeyStartOrA(event.key):
             self.Click()
             
         if event.key == CurKeys["Up"]:
@@ -279,7 +278,7 @@ class LanguagesPage(Page):
                     i.Draw()                
 
         if self._HWND != None:
-            self._HWND.fill((255,255,255))
+            self._HWND.fill(MySkinManager.GiveColor("White"))
             
             self._HWND.blit(self._CanvasHWND,(self._PosX,self._PosY,self._Width, self._Height ) )
             
