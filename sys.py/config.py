@@ -13,13 +13,11 @@ Battery   = "/sys/class/power_supply/axp20x-battery/uevent"
 
 MPD_socket = "/tmp/mpd.socket"
 
-UPDATE_URL="https://raw.githubusercontent.com/clockworkpi/CPI/master/launcher_ver0.4.json"
+UPDATE_URL="https://raw.githubusercontent.com/clockworkpi/CPI/master/launcher_ver.json"
 
-VERSION="stable 1.25"
+VERSION="stable 1.24"
 
 SKIN=None
-
-ButtonsLayout="xbox"
 
 ## three timer values in seconds: dim screen, close screen,PowerOff
 ## zero means no action
@@ -32,7 +30,7 @@ PowerLevels["balance_saving"] = [40,0,0]
 PowerLevel = "balance_saving"
 
 def PreparationInAdv():
-    global SKIN,ButtonsLayout
+    global SKIN
     global PowerLevel
     
     if SKIN != None:
@@ -46,16 +44,7 @@ def PreparationInAdv():
         
         gameshell_skin = gameshell_skin.strip()
         SKIN= gameshell_skin
-        
-    if FileExists(".buttonslayout") == True:
-        with open(".buttonslayout") as f:
-            btnlayout = f.read()
-        
-        btnlayout = btnlayout.strip()
-        ButtonsLayout = btnlayout
-        if ButtonsLayout != "xbox" and ButtonsLayout != "snes":
-            ButtonsLayout = "xbox"
-        
+    
     if FileExists(".powerlevel") == False:
         os.system("touch .powerlevel")
     
