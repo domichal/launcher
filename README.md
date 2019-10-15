@@ -18,15 +18,17 @@ sudo adduser cpi cpifav
 /home/cpi/
 ├── apps
 │   ├── emulators
-│   └── launcher <-Here we are
-│       ├── Menu
-│       ├── sys.py
-│       └── truetype
+|   └── Menu
+├── launcher <-Here we are
+│   ├── Menu
+|   ├── skin
+│   └── sys.py
 ├── games
 │   ├── FreeDM
 │   ├── MAME
 │   └── nxengine
 └── music
+
 ```
 ## Create the necessary directories
 ```
