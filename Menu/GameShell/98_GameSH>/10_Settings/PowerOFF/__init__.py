@@ -7,14 +7,12 @@ from UI.constants    import RUNSYS
 from UI.keys_def     import CurKeys, IsKeyStartOrA, IsKeyMenuOrB
 from UI.confirm_page import ConfirmPage
 from UI.lang_manager import MyLangManager
-
 import config
 
 class PowerOffConfirmPage(ConfirmPage):
     
-    _ConfirmText = MyLangManager.Tr("Awaiting Input")
-    _FootMsg = ["Nav","","Reboot","Cancel","Shutdown"]
-
+    _ConfirmText = MyLangManager.Tr("Confirm Power OFF?")
+    
     def CheckBattery(self):
         try:
             f = open(config.Battery)
@@ -43,6 +41,7 @@ class PowerOffConfirmPage(ConfirmPage):
     def KeyDown(self,event):
         
         if IsKeyMenuOrB(event.key):
+            
             self.ReturnToUpLevelPage()
             self._Screen.Draw()
             self._Screen.SwapAndShow()
@@ -59,12 +58,7 @@ class PowerOffConfirmPage(ConfirmPage):
             
             cmdpath += "sudo halt -p"
             pygame.event.post( pygame.event.Event(RUNSYS, message=cmdpath))
-            
-        if event.key == CurKeys["X"]:
-            cmdpath = "feh --bg-center gameshell/wallpaper/seeyou.png;"
-            cmdpath += "sleep 3;"
-            cmdpath += "sudo reboot"
-            pygame.event.post( pygame.event.Event(RUNSYS, message=cmdpath))
+
 
 
 class APIOBJ(object):

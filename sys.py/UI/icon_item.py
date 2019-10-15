@@ -3,7 +3,7 @@
 import pygame
 
 ## local import
-from constants  import icon_width,icon_height,default_menu_item,ICON_TYPES,ALIGN,icon_ext,Width,Height
+from constants  import icon_width,icon_height,ICON_TYPES,ALIGN,icon_ext,default_menu_item,Width,Height
 from util_funcs import color_surface,midRect
 from label      import Label
 from lang_manager import MyLangManager

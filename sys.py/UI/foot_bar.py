@@ -15,8 +15,6 @@ from lang_manager import MyLangManager
 from widget      import Widget
 from skin_manager import MySkinManager
 
-import config
-
 icon_base_path = MySkinManager.GiveIcon("gameshell/footbar_icons/")
 
 class FootBarIcon(MultiIconItem):
