@@ -1,0 +1,2 @@
+cd ~/apps/DinguxCommander
+./DinguxCommander
