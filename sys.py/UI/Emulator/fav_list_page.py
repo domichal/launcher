@@ -3,7 +3,7 @@
 import os
 import pygame
 import glob
-
+import time
 from libs.roundrects import aa_round_rect
 
 ## local UI import
@@ -11,9 +11,8 @@ from UI.constants import Width,Height,ICON_TYPES,RUNEVT
 from UI.page   import Page,PageSelector
 from UI.label  import Label
 from UI.icon_item import IconItem
-from UI.fonts  import fonts
 from UI.util_funcs import midRect,CmdClean,FileExists
-from UI.keys_def   import CurKeys
+from UI.keys_def   import CurKeys, IsKeyStartOrA, IsKeyMenuOrB
 from UI.multi_icon_item import MultiIconItem
 from UI.icon_pool import MyIconPool
 from UI.scroller  import ListScroller
@@ -92,9 +91,9 @@ class FavListPage(Page):
 
     _Icons = {}
     _Selector=None
-    _FootMsg = ["Nav","Scan","Remove","","Run"]
+    _FootMsg = ["Nav","Remove","Scan","","Run"]
     _MyList = []
-    _ListFont = fonts["notosanscjk15"]
+    _ListFont = MyLangManager.TrFont("notosanscjk15")
     _MyStack = None
     _Emulator = None
     _Parent   = None
@@ -130,8 +129,11 @@ class FavListPage(Page):
                     stats = os.stat(v)
                     if stats.st_gid != self._Parent._FavGID: ## only favs
                         continue
+                    try:
+                        dirmap["gamedir"] = v.decode("utf8","ignore")
+                    except:
+                        dirmap["gamedir"] = v.decode("ascii","ignore")
                     
-                    dirmap["gamedir"] = v.decode("utf8")
                     ret.append(dirmap)            
             if os.path.isfile(v) and self._Emulator["FILETYPE"] == "file":
                 stats = os.stat(v)
@@ -142,7 +144,11 @@ class FavListPage(Page):
                     pieces  = bname.split(".")
                     if len(pieces) > 1:
                         if pieces[ len(pieces)-1   ].lower() in self._Emulator["EXT"]:
-                            dirmap["file"] = v.decode("utf8")
+                            try:
+                                dirmap["file"] = v.decode("utf8","ignore")
+                            except:
+                                dirmap["file"] = v.decode("ascii","ignore")
+                            
                             ret.append(dirmap)
                 
 #            else:
@@ -228,7 +234,7 @@ class FavListPage(Page):
 
 
         bgpng = IconItem()
-        bgpng._ImgSurf = MyIconPool._Icons["star"]
+        bgpng._ImgSurf = MyIconPool.GiveIconSurface("star")
         bgpng._MyType = ICON_TYPES["STAT"]
         bgpng._Parent = self
         bgpng.AddLabel(MyLangManager.Tr("MyFavGames"), MyLangManager.TrFont("varela18"))
@@ -255,30 +261,33 @@ class FavListPage(Page):
         if len(self._MyList) == 0:
             return
         
-        self._PsIndex -= 1
+        tmp = self._PsIndex
+        self._PsIndex -= self._ScrollStep
+        
         if self._PsIndex < 0:
             self._PsIndex = 0
-        
+        dy = tmp - self._PsIndex
         cur_li = self._MyList[self._PsIndex]
         if cur_li._PosY < 0:
             for i in range(0, len(self._MyList)):
-                self._MyList[i]._PosY += self._MyList[i]._Height
-
-            self._Scrolled += 1
+                self._MyList[i]._PosY += self._MyList[i]._Height*dy
+            self._Scrolled +=dy
 
     def ScrollDown(self):
         if len(self._MyList) == 0:
             return
-        
-        self._PsIndex +=1
+        tmp = self._PsIndex
+        self._PsIndex +=self._ScrollStep
         if self._PsIndex >= len(self._MyList):
             self._PsIndex = len(self._MyList) -1
-
+        
+        dy = self._PsIndex - tmp 
         cur_li = self._MyList[self._PsIndex]
         if cur_li._PosY +cur_li._Height > self._Height:
             for i in range(0,len(self._MyList)):
-                self._MyList[i]._PosY -= self._MyList[i]._Height
-            self._Scrolled -=1
+                self._MyList[i]._PosY -= self._MyList[i]._Height*dy
+            self._Scrolled -= dy
+    
     def SyncScroll(self):
         ## 
         if self._Scrolled == 0:
@@ -333,7 +342,7 @@ class FavListPage(Page):
             if self._Emulator["ROM_SO"] =="": #empty means No needs for rom so
                 pygame.event.post( pygame.event.Event(RUNEVT, message=cmdpath))
             else:
-                if FileExists(self._Emulator["ROM_SO"]):
+                if FileExists(self._Emulator["ROM_SO"].split(" ")[0]):
                     pygame.event.post( pygame.event.Event(RUNEVT, message=cmdpath))
                 else:
                     self._Screen.PushPage(self._RomSoConfirmDownloadPage)
@@ -374,25 +383,40 @@ class FavListPage(Page):
         self._Screen.Draw()
         self._Screen.SwapAndShow()
         
+    def SpeedScroll(self, thekey):
+        if self._Screen._LastKey == thekey:
+            self._ScrollStep+=1
+            if self._ScrollStep >=5:
+                self._ScrollStep = 5
+        else:
+            self._ScrollStep = 1
+           
+        cur_time = time.time()
+            
+        if cur_time - self._Screen._LastKeyDown > 0.3:
+            self._ScrollStep = 1 
+    
     def KeyDown(self,event):
         
-        if event.key == CurKeys["Menu"] or event.key == CurKeys["Left"]: 
+        if IsKeyMenuOrB(event.key) or event.key == CurKeys["Left"]: 
             self.ReturnToUpLevelPage()
             self._Screen.Draw()
             self._Screen.SwapAndShow()
 
         
         if event.key == CurKeys["Up"]:
+            self.SpeedScroll(event.key)
             self.ScrollUp()
             self._Screen.Draw()
             self._Screen.SwapAndShow()
         if event.key == CurKeys["Down"]:
+            self.SpeedScroll(event.key)
             self.ScrollDown()
             self._Screen.Draw()
             self._Screen.SwapAndShow()
         
 
-        if event.key == CurKeys["Enter"]:
+        if IsKeyStartOrA(event.key):
             self.Click()
 
                 

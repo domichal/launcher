@@ -4,6 +4,9 @@ import dbus
 import dbus.service
 import sys
 import commands
+import logging
+import errno
+
 from wicd import misc 
 ##misc.to_bool
 ##misc.misc.noneToString
@@ -21,7 +24,7 @@ import pygame
 from sys import exit
 import os
 
-from beeprint import pp
+#from beeprint import pp
 ########
 if getattr(dbus, 'version', (0, 0, 0)) < (0, 80, 0):
     import dbus.glib
@@ -29,10 +32,10 @@ else:
     from dbus.mainloop.glib import DBusGMainLoop
     DBusGMainLoop(set_as_default=True)
 
-
+import config
 #local UI import
-from UI.constants    import Width,Height,bg_color,icon_width,icon_height,DT,GMEVT,RUNEVT,RUNSYS,ICON_TYPES,POWEROPT,RESTARTUI
-from UI.util_funcs   import ReplaceSuffix,FileExists, ReadTheFileContent,midRect,color_surface,SwapAndShow,GetExePath,X_center_mouse
+from UI.constants    import Width,Height,icon_width,icon_height,DT,RUNEVT,RUNSYS,ICON_TYPES,POWEROPT,RESTARTUI,RUNSH
+from UI.util_funcs   import ReplaceSuffix,FileExists, ReadTheFileContent,midRect,color_surface,SwapAndShow,GetExePath,X_center_mouse,ArmSystem
 from UI.page         import PageStack,PageSelector,Page
 from UI.label        import Label
 from UI.icon_item    import IconItem
@@ -43,10 +46,9 @@ from UI.main_screen  import MainScreen
 from UI.above_all_patch import SoundPatch
 from UI.icon_pool    import MyIconPool
 from UI.createby_screen import CreateByScreen
-
+from UI.skin_manager import MySkinManager
 from libs.DBUS            import setup_dbus
 
-import config
 
 if not pygame.display.get_init():
     pygame.display.init()
@@ -178,7 +180,6 @@ def RestoreLastBackLightBrightness(main_screen):
             f.truncate()
             f.close()
     
-            
     if main_screen._CounterScreen._Counting==True:
         main_screen._CounterScreen.StopCounter()
         main_screen.Draw()
@@ -248,12 +249,7 @@ def InspectionTeam(main_screen):
         
     elif cur_time - everytime_keydown > time_3 and passout_time_stage == 2:
         print("Power Off counting down")
-        
-        main_screen._CounterScreen.Draw()
-        main_screen._CounterScreen.SwapAndShow()
-        main_screen._CounterScreen.StartCounter()
-        
-        
+                
         try:
             f = open(config.BackLight,"r+")
         except IOError:
@@ -265,7 +261,11 @@ def InspectionTeam(main_screen):
                 f.write(str(brt))
                 f.truncate()
                 f.close()
-                
+            
+            main_screen._CounterScreen.Draw()
+            main_screen._CounterScreen.SwapAndShow()
+            main_screen._CounterScreen.StartCounter()
+        
         main_screen._TitleBar._InLowBackLight = 0
 
         passout_time_stage = 4
@@ -290,7 +290,36 @@ def RecordKeyDns(thekey,main_screen):
         return True
     
     return False
+
+
+
+def release_self_fds():
+    fds_flags= ["pipe","socket",".ttf"]
+    """List process currently open FDs and their target """
+    if sys.platform != 'linux2':
+        raise NotImplementedError('Unsupported platform: %s' % sys.platform)
+
+    ret = {}
+    base = '/proc/self/fd'
+    for num in os.listdir(base):
+        path = None
+        try:
+            path = os.readlink(os.path.join(base, num))
+        except OSError as err:
+            # Last FD is always the "listdir" one (which may be closed)
+            if err.errno != errno.ENOENT:
+                raise
+        ret[int(num)] = path
     
+    for key in ret:
+      if ret[key] != None and isinstance(ret[key], str):
+        for i in fds_flags:
+          if i in ret[key]:
+            os.close(key)
+            break
+    return ret  
+
+  
 def event_process(event,main_screen):
     global sound_patch
     global everytime_keydown 
@@ -301,11 +330,6 @@ def event_process(event,main_screen):
             return
         if event.type == pygame.QUIT:
             exit()
-        if event.type == GMEVT:
-            main_screen.Draw()
-            main_screen.SwapAndShow()
-            pygame.event.clear(GMEVT)
-            return
         if event.type == RUNEVT:            
             if config.DontLeave==True:
                 os.chdir(GetExePath())
@@ -319,10 +343,19 @@ def event_process(event,main_screen):
                 pygame.quit()
                 gobject_main_loop.quit()
                 os.chdir( GetExePath())
-                exec_app_cmd = "cd "+os.path.dirname(event.message)+";"
+                
+                endpos = len(event.message)
+                space_break_pos = endpos
+                for i in range(0,endpos):
+                    if event.message[i] == "/" and event.message[i-1] == " " and i > 6:
+                        space_break_pos = i-1
+                        break
+                
+                exec_app_cmd = "cd "+os.path.dirname(event.message[:space_break_pos])+";"
                 exec_app_cmd += event.message
                 exec_app_cmd += "; sync & cd "+GetExePath()+"; exec python "+myscriptname
                 print(exec_app_cmd)
+                release_self_fds()
                 os.execlp("/bin/sh","/bin/sh","-c", exec_app_cmd)
                 os.chdir( GetExePath())
                 os.exelp("python","python"," "+myscriptname)
@@ -337,10 +370,18 @@ def event_process(event,main_screen):
                 pygame.quit()
                 gobject_main_loop.quit()
                 os.chdir( GetExePath())
-                exec_app_cmd = "cd "+os.path.dirname(event.message)+";" 
+                endpos = len(event.message)
+                space_break_pos = endpos
+                for i in range(0,endpos):
+                    if event.message[i] == "/" and event.message[i-1] == " " and i > 6:
+                        space_break_pos = i-1
+                        break
+                                        
+                exec_app_cmd = "cd "+os.path.dirname(event.message[:space_break_pos])+";" 
                 exec_app_cmd += event.message
                 exec_app_cmd += "; sync & cd "+GetExePath()+"; exec python "+myscriptname
                 print(exec_app_cmd)
+                release_self_fds()
                 os.execlp("/bin/sh","/bin/sh","-c", exec_app_cmd)
                 os.chdir( GetExePath())
                 os.exelp("python","python"," "+myscriptname)
@@ -351,9 +392,18 @@ def event_process(event,main_screen):
             os.chdir(GetExePath())
             exec_app_cmd = " sync & cd "+GetExePath()+"; exec python "+myscriptname
             print(exec_app_cmd)
+            release_self_fds()
             os.execlp("/bin/sh","/bin/sh","-c", exec_app_cmd)
             os.chdir( GetExePath())
             os.exelp("python","python"," "+myscriptname)
+            return
+        if event.type == RUNSH:
+            pygame.quit()
+            gobject_main_loop.quit()
+            exec_app_cmd = event.message +";"
+            release_self_fds()
+            os.execlp("/bin/sh","/bin/sh","-c", exec_app_cmd)
+            sys.exit(-1)
             return
         if event.type == POWEROPT:
             everytime_keydown = time.time()
@@ -411,6 +461,7 @@ def event_process(event,main_screen):
                     if callable( key_down_cb ):
                         main_screen.KeyDown(event)
             
+            main_screen._LastKeyDown = everytime_keydown
             return
                     
 def gobject_pygame_event_poll_timer(main_screen):
@@ -520,7 +571,7 @@ def big_loop():
     sound_patch.Init()
     #pp(main_screen._Pages[0],True,6)
 
-    screen.fill(bg_color)
+    screen.fill(MySkinManager.GiveColor("White"))
     main_screen.Draw()
     main_screen.SwapAndShow()
 
@@ -548,11 +599,10 @@ if __name__ == '__main__':
     screen = pygame.display.set_mode(SCREEN_SIZE, 0, 32)
 
     pygame.event.set_allowed(None) 
-    pygame.event.set_allowed([pygame.KEYDOWN,pygame.KEYUP,GMEVT,RUNEVT,RUNSYS,POWEROPT,RESTARTUI])
+    pygame.event.set_allowed([pygame.KEYDOWN,pygame.KEYUP,RUNEVT,RUNSYS,POWEROPT,RESTARTUI,RUNSH])
     
     pygame.key.set_repeat(DT+DT*6+DT/2, DT+DT*3+DT/2)
-
-
+    
     MyIconPool.Init()
     
     setup_dbus()
@@ -568,22 +618,6 @@ if __name__ == '__main__':
         print("This pygame does not support PNG")
         exit()
 
-
-    if FileExists(".powerlevel") == False:
-        os.system("touch .powerlevel")
-    
-    with open(".powerlevel","r") as f:
-        powerlevel = f.read()
-    
-    powerlevel = powerlevel.strip()
-    if powerlevel != "":
-        config.PowerLevel = powerlevel
-        if powerlevel != "supersaving":
-            os.system("sudo iw wlan0 set power_save off >/dev/null")
-        else:
-            os.system("sudo iw wlan0 set power_save on > /dev/null")
-    else:
-        os.system("sudo iw wlan0 set power_save off >/dev/null")
     
     crt_screen = CreateByScreen()
     crt_screen.Init()

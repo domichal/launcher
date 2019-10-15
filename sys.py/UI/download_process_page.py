@@ -13,9 +13,8 @@ from UI.constants import Width,Height,ICON_TYPES,RUNEVT
 from UI.page   import Page,PageSelector
 from UI.label  import Label
 from UI.icon_item import IconItem
-from UI.fonts  import fonts
 from UI.util_funcs import midRect,CmdClean,FileExists
-from UI.keys_def   import CurKeys
+from UI.keys_def   import CurKeys, IsKeyMenuOrB
 from UI.multi_icon_item import MultiIconItem
 from UI.icon_pool  import MyIconPool
 from UI.download   import Download
@@ -59,14 +58,14 @@ class DownloadProcessPage(Page):
         self._PngSize["needwifi_bg"] = (253,132)
         
         bgpng = IconItem()
-        bgpng._ImgSurf = MyIconPool._Icons["rom_download"]
+        bgpng._ImgSurf = MyIconPool.GiveIconSurface("rom_download")
         bgpng._MyType = ICON_TYPES["STAT"]
         bgpng._Parent = self
         bgpng.Adjust(0,0,self._PngSize["bg"][0],self._PngSize["bg"][1],0)
         self._Icons["bg"] = bgpng
 
         needwifi_bg = IconItem()
-        needwifi_bg._ImgSurf = MyIconPool._Icons["needwifi_bg"]
+        needwifi_bg._ImgSurf = MyIconPool.GiveIconSurface("needwifi_bg")
         needwifi_bg._MyType = ICON_TYPES["STAT"]
         needwifi_bg._Parent = self
         needwifi_bg.Adjust(0,0,self._PngSize["needwifi_bg"][0],self._PngSize["needwifi_bg"][1],0)
@@ -76,16 +75,16 @@ class DownloadProcessPage(Page):
         
         self._FileNameLabel = Label()
         self._FileNameLabel.SetCanvasHWND(self._CanvasHWND)
-        self._FileNameLabel.Init("", fonts["varela12"])
+        self._FileNameLabel.Init("", MyLangManager.TrFont("varela12"))
 
         self._SizeLabel = Label()
         self._SizeLabel.SetCanvasHWND(self._CanvasHWND)
-        self._SizeLabel.Init("0/0Kb",fonts["varela12"])
+        self._SizeLabel.Init("0/0Kb",MyLangManager.TrFont("varela12"))
         self._SizeLabel.SetColor( self._URLColor )
 
         
     def OnExitCb(self,event):
-        print("DownloadProcessPage OnExitCb")
+        #print("DownloadProcessPage OnExitCb")
         if self._Downloader == None:
             return        
         try:
@@ -98,14 +97,14 @@ class DownloadProcessPage(Page):
         if self._Screen.CurPage() == self:
             if self._Downloader.isFinished():
                 if self._Downloader.isSuccessful():
-                    print("Success!")
+                    print("Download Success!")
                     # Do something with obj.get_dest()
                     filename = os.path.basename(self._Downloader.get_dest())
                     cur_dir = os.getcwd()
                     
                     if filename.endswith(".zip"):
                         os.chdir(self._DST_DIR)
-                        os.system( "unzip " + filename )
+                        os.system( "unzip -o " + filename )
                     
                     elif filename.endswith(".zsync"):
                         os.chdir(self._DST_DIR)
@@ -116,7 +115,8 @@ class DownloadProcessPage(Page):
                         os.system( "tar xf " + filename)
                         os.system( "rm -rf " + filename)
                     
-                    os.chdir(cur_dir)    
+                    os.chdir(cur_dir)
+                    self.DownloadPostJob()    
                     self.ReturnToUpLevelPage()
                     self._Screen.Draw()
                     self._Screen.SwapAndShow()
@@ -156,6 +156,20 @@ class DownloadProcessPage(Page):
         else:
             return False
     
+    def DownloadPostJob(self):
+        cur_dir = os.getcwd()
+        
+        arr = self._URL.rsplit('/', 1)
+        if len(arr) > 1:
+            downloaded_filename = arr[1]
+            try:
+                os.chdir(os.path.join(cur_dir,"patches",downloaded_filename))
+                os.system("/bin/sh Run.sh")
+            except:
+              pass
+          
+        os.chdir(cur_dir)
+        
     def StartDownload(self,url,dst_dir):
         if is_wifi_connected_now() == False:
             return
@@ -176,7 +190,7 @@ class DownloadProcessPage(Page):
         self._DownloaderTimer = gobject.timeout_add(100, self.GObjectUpdateProcessInterval)
         
     def KeyDown(self,event):
-        if event.key == CurKeys["Menu"] or event.key == CurKeys["A"]:
+        if IsKeyMenuOrB(event.key):
             gobject.source_remove(self._DownloaderTimer)
             self._DownloaderTimer = -1
             

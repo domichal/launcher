@@ -9,3 +9,15 @@ sys.py/.lang
 *.cfg
 **/Jobs/*
 !**/Jobs/.gitkeep
+!**/Jobs/00_lowpower.sh
+!**/Jobs/00_lowpower.alias
+.done
+bios
+bios/*
+screenshots
+screenshots/*
+.pcsx
+.pcsx/*
+*.log
+.DS_Store
+sys.py/.*
