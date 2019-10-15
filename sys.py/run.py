@@ -343,7 +343,15 @@ def event_process(event,main_screen):
                 pygame.quit()
                 gobject_main_loop.quit()
                 os.chdir( GetExePath())
-                exec_app_cmd = "cd "+os.path.dirname(event.message)+";"
+                
+                endpos = len(event.message)
+                space_break_pos = endpos
+                for i in range(0,endpos):
+                    if event.message[i] == "/" and event.message[i-1] == " " and i > 6:
+                        space_break_pos = i-1
+                        break
+                
+                exec_app_cmd = "cd "+os.path.dirname(event.message[:space_break_pos])+";"
                 exec_app_cmd += event.message
                 exec_app_cmd += "; sync & cd "+GetExePath()+"; exec python "+myscriptname
                 print(exec_app_cmd)
@@ -362,7 +370,14 @@ def event_process(event,main_screen):
                 pygame.quit()
                 gobject_main_loop.quit()
                 os.chdir( GetExePath())
-                exec_app_cmd = "cd "+os.path.dirname(event.message)+";" 
+                endpos = len(event.message)
+                space_break_pos = endpos
+                for i in range(0,endpos):
+                    if event.message[i] == "/" and event.message[i-1] == " " and i > 6:
+                        space_break_pos = i-1
+                        break
+                                        
+                exec_app_cmd = "cd "+os.path.dirname(event.message[:space_break_pos])+";" 
                 exec_app_cmd += event.message
                 exec_app_cmd += "; sync & cd "+GetExePath()+"; exec python "+myscriptname
                 print(exec_app_cmd)

@@ -17,10 +17,10 @@ MenuBorderWidth 1
 NoMenuShadows
 
 NoDefaults
-LeftTitleButton "~/launcher/.twm/close" = f.delete
-RightTitleButton "~/launcher/.twm/iconify" = f.iconify
-RightTitleButton "~/launcher/.twm/resize" = f.resize
-RightTitleButton "~/launcher/.twm/fullsize" = f.fullzoom
+LeftTitleButton "~/mylauncher/.twm/close" = f.delete
+RightTitleButton "~/mylauncher/.twm/iconify" = f.iconify
+RightTitleButton "~/mylauncher/.twm/resize" = f.resize
+RightTitleButton "~/mylauncher/.twm/fullsize" = f.fullzoom
 
 TitleFont "-adobe-helvetica-bold-r-normal--*-100-*-*-*-*-*-*"
 ResizeFont "-adobe-helvetica-bold-r-normal--*-100-*-*-*-*-*-*"
@@ -55,8 +55,8 @@ Cursors
 ForceIcons
 Icons
 {
-   "Chrome" "~/launcher/.twm/chrome.xbm"
-   "xterm" "~/launcher/.twm/xlogo32"
+   "Chrome" "~/mylauncher/.twm/chrome.xbm"
+   "xterm" "~/mylauncher/.twm/xlogo32"
 }
 
 

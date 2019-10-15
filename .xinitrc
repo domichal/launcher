@@ -2,18 +2,18 @@ session=${1:-gameshell}
 
 case $session in
 hdmi )
-	feh --bg-center ~/launcher/sys.py/gameshell/wallpaper/desktopbg.jpg
-	exec ~/launcher/load.sh &
-	exec ~/launcher/sys.py/gsnotify/gsnotify-arm daemon &
-	#exec /usr/bin/twm -f ~/launcher/.twmrc
-	exec ~/launcher/dwm-mod
+	feh --bg-center ~/mylauncher/sys.py/gameshell/wallpaper/desktopbg.jpg
+	exec ~/mylauncher/load.sh &
+	exec ~/mylauncher/sys.py/gsnotify/gsnotify-arm daemon &
+	#exec /usr/bin/twm -f ~/mylauncher/.twmrc
+	exec ~/mylauncher/dwm-mod
 	;;
 gameshell ) 
-	feh --bg-center ~/launcher/sys.py/gameshell/wallpaper/loading.png
-	exec ~/launcher/load.sh &
-	exec ~/launcher/sys.py/gsnotify/gsnotify-arm &
-	#exec awesome -c ~/launcher/awesome/rc.lua
-	exec ~/launcher/dwm-mod -w
+	feh --bg-center ~/mylauncher/sys.py/gameshell/wallpaper/loading.png
+	exec ~/mylauncher/load.sh &
+	exec ~/mylauncher/sys.py/gsnotify/gsnotify-arm &
+	#exec awesome -c ~/mylauncher/awesome/rc.lua
+	exec ~/mylauncher/dwm-mod -w
 	;;
 *) 
 	exec $1;;
