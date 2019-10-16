@@ -52,7 +52,7 @@ class PageSelector(Widget):
 
     # Selector outline filename
     # see skin/default/sys.py/gameshell/icons
-    _IconSelector = "fancyselector"
+    _IconSelector = "fancy2selector"
 
     def __init__(self):
         pass
