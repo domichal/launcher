@@ -13,7 +13,6 @@ from pygame.locals import *
 
 #UI lib
 
-
 Width = 320
 Height = 240
 

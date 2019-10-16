@@ -16,7 +16,7 @@ from libs import easing
 # from beeprint import pp
 
 # local import
-from constants import ALIGN, icon_width, icon_height, default_menu_item, Width, Height, ICON_TYPES
+from constants import ALIGN, icon_width, icon_height, default_menu_item, selector_icon, Width, Height, ICON_TYPES
 from util_funcs import midRect,FileExists
 from keys_def import CurKeys, IsKeyStartOrA, IsKeyMenuOrB
 from icon_pool import MyIconPool
@@ -49,6 +49,10 @@ class PageSelector(Widget):
     _Alpha = 0
     _OnShow = True
     _IconSurf = None
+
+    # Selector outline filename
+    # see skin/default/sys.py/gameshell/icons
+    _IconSelector = "blueselector"
 
     def __init__(self):
         pass
@@ -145,7 +149,7 @@ class Page(Widget):
                 cnt+=1
         
         ps = PageSelector()
-        ps._IconSurf = MyIconPool.GiveIconSurface("blueselector")
+        ps._IconSurf = MyIconPool.GiveIconSurface(ps._IconSelector)
         ps._Parent = self
         ps.Init(icon_width/2, TitleBar._BarHeight+icon_height/2,92,92,128)
         self._Ps = ps
@@ -169,7 +173,7 @@ class Page(Widget):
             it._ImgSurf = pygame.transform.smoothscale(it._ImgSurf,(it._Width,it._Height))
 
         ps = PageSelector()
-        ps._IconSurf = MyIconPool.GiveIconSurface("blueselector")
+        ps._IconSurf = MyIconPool.GiveIconSurface(ps._IconSelector)
         ps._Parent = self
         ps.Init(start_x,start_y,92,92,128)
         
@@ -221,7 +225,7 @@ class Page(Widget):
                 # it._ImgSurf = pygame.transform.smoothscale(it._ImgSurf,(it._Width,it._Height))
 
         ps = PageSelector()
-        ps._IconSurf = MyIconPool.GiveIconSurface("blueselector")
+        ps._IconSurf = MyIconPool.GiveIconSurface(ps._IconSelector)
         ps._Parent = self
         ps.Init(start_x,start_y,92,92,128)
         
@@ -259,7 +263,7 @@ class Page(Widget):
                 cnt+=1
                 
         ps = PageSelector()
-        ps._IconSurf = MyIconPool.GiveIconSurface("blueselector")
+        ps._IconSurf = MyIconPool.GiveIconSurface(ps._IconSelector)
         ps._Parent = self
         ps.Init(icon_width/2,icon_height/2,92,92,128)
         self._Ps = ps
@@ -282,7 +286,7 @@ class Page(Widget):
                 it.Adjust(start_x+i*icon_width,start_y,icon_width,icon_height,0)
 
             ps = PageSelector()
-            ps._IconSurf = MyIconPool.GiveIconSurface("blueselector")
+            ps._IconSurf = MyIconPool.GiveIconSurface(ps._IconSelector)
             ps._Parent = self
             ps.Init(start_x,start_y,92,92,128)
             self._Ps = ps
@@ -301,7 +305,7 @@ class Page(Widget):
 
        
             ps = PageSelector()
-            ps._IconSurf = MyIconPool.GiveIconSurface("blueselector")
+            ps._IconSurf = MyIconPool.GiveIconSurface(ps._IconSelector)
             ps._Parent = self
             ps.Init(start_x,start_y-self._SelectedIconTopOffset,92,92,128)
             
@@ -337,7 +341,7 @@ class Page(Widget):
             
         if self._IconNumbers > 0:
             ps = PageSelector()
-            ps._IconSurf = MyIconPool.GiveIconSurface("blueselector")
+            ps._IconSurf = MyIconPool.GiveIconSurface(ps._IconSelector)
             ps._Parent = self
             ps.Init(start_x,start_y,icon_width+4,icon_height+4,128)
             self._Ps = ps
