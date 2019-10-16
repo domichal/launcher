@@ -16,7 +16,7 @@ from libs import easing
 # from beeprint import pp
 
 # local import
-from constants import ALIGN, icon_width, icon_height, default_menu_item, selector_icon, Width, Height, ICON_TYPES
+from constants import ALIGN, icon_width, icon_height, default_menu_item, Width, Height, ICON_TYPES
 from util_funcs import midRect,FileExists
 from keys_def import CurKeys, IsKeyStartOrA, IsKeyMenuOrB
 from icon_pool import MyIconPool
