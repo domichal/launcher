@@ -5,6 +5,7 @@ import config
 import ConfigParser
 
 from util_funcs  import FileExists
+from UI.constants import ADDMENU_PATH
 
 class CaseConfigParser(ConfigParser.SafeConfigParser):
     def optionxform(self, optionstr):

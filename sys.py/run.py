@@ -34,7 +34,7 @@ else:
 
 import config
 #local UI import
-from UI.constants    import Width,Height,icon_width,icon_height,DT,RUNEVT,RUNSYS,ICON_TYPES,POWEROPT,RESTARTUI,RUNSH
+from UI.constants    import Width,Height,icon_width,icon_height,ADDMENU_PATH,DT,RUNEVT,RUNSYS,ICON_TYPES,POWEROPT,RESTARTUI,RUNSH
 from UI.util_funcs   import ReplaceSuffix,FileExists, ReadTheFileContent,midRect,color_surface,SwapAndShow,GetExePath,X_center_mouse,ArmSystem
 from UI.page         import PageStack,PageSelector,Page
 from UI.label        import Label
