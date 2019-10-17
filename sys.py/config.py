@@ -13,12 +13,6 @@ Battery   = "/sys/class/power_supply/axp20x-battery/uevent"
 
 MPD_socket = "/tmp/mpd.socket"
 
-## mylauncher specific ##
-ADDMENU_PATH = "/home/cpi/mylauncher/myMenu"
-
-# 1 is the default value gameshell comes with
-DEFAULT_FOCUSED_ICON = 0
-
 #UPDATE_URL="https://raw.githubusercontent.com/clockworkpi/CPI/master/launcher_ver0.4.json"
 
 VERSION="stable 1.25"
@@ -36,6 +30,14 @@ PowerLevels["server"]      = [40,120,0]
 PowerLevels["balance_saving"] = [40,0,0]
 
 PowerLevel = "balance_saving"
+
+## vvv mylauncher specific vvv ##
+
+ADDMENU_PATH = "/home/cpi/mylauncher/myMenu"
+# 1 is the default value gameshell comes with
+DEFAULT_FOCUSED_ICON = 0
+
+## ^^^ mylauncher specific ^^^ ##
 
 def PreparationInAdv():
     global SKIN,ButtonsLayout

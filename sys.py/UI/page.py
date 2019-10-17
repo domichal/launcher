@@ -182,7 +182,7 @@ class Page(Widget):
         self._OnShow = False
         
         if self._IconNumbers > 1:
-            self._PsIndex = DEFAULT_FOCUSED_ICON
+            self._PsIndex = config.DEFAULT_FOCUSED_ICON
             self._IconIndex = self._PsIndex
             self._PrevIconIndex = self._IconIndex
             self._Icons[self._IconIndex]._PosY -= self._SelectedIconTopOffset
@@ -234,7 +234,7 @@ class Page(Widget):
         self._OnShow = False
 
         if self._IconNumbers > 1:
-            self._PsIndex = DEFAULT_FOCUSED_ICON
+            self._PsIndex = config.DEFAULT_FOCUSED_ICON
             self._IconIndex = self._PsIndex
             self._PrevIconIndex = self._IconIndex
             self._Icons[self._IconIndex]._PosY -= self._SelectedIconTopOffset
@@ -314,7 +314,7 @@ class Page(Widget):
             self._OnShow = False
             
             if self._IconNumbers > 1:
-                self._PsIndex = DEFAULT_FOCUSED_ICON
+                self._PsIndex = config.DEFAULT_FOCUSED_ICON
                 self._IconIndex = self._PsIndex
                 self._PrevIconIndex = self._IconIndex
                 self._Icons[self._IconIndex]._PosY -= self._SelectedIconTopOffset
