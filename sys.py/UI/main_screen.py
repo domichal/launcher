@@ -403,7 +403,7 @@ class MainScreen(Widget):
                 return True
         return False
     
-    def ReunionPagesIcons(self): #This is for combining /home/cpi/apps/Menu and ~/launcher/Menu/GameShell 
+    def ReunionPagesIcons(self): #This is for combining additional menu together with ~/launcher/Menu/GameShell 
         for p in self._Pages:
             tmp = []
             for i,x in enumerate(p._Icons):
