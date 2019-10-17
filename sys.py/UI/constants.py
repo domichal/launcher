@@ -16,12 +16,6 @@ from pygame.locals import *
 Width = 320
 Height = 240
 
-# >>> mylauncher specfic
-ADDMENU_PATH="/home/cpi/mylauncher/myMenu"
-# 1 is the default value gameshell comes with
-default_menu_item = 0
-# <<< mylauncher specfic
-
 icon_width  = 80
 icon_height = 80
 icon_ext = ".sh"

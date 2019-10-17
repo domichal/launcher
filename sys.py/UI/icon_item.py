@@ -3,11 +3,12 @@
 import pygame
 
 ## local import
-from constants  import icon_width,icon_height,default_menu_item,ICON_TYPES,ALIGN,icon_ext,Width,Height
+from constants  import icon_width,icon_height,ICON_TYPES,ALIGN,icon_ext,Width,Height
 from util_funcs import color_surface,midRect
 from label      import Label
 from lang_manager import MyLangManager
 from widget     import Widget 
+from cofig      import DEFAULT_FOCUSED_ICON
 class IconItem(Widget):
     _ImageName=""
     _ImgSurf = None
@@ -65,7 +66,7 @@ class IconItem(Widget):
             elif self._LinkPage._Align == ALIGN["SLeft"]:
                 self._LinkPage.AdjustSAutoLeftAlign()
                 if self._LinkPage._IconNumbers > 1:
-                    self._LinkPage._PsIndex = default_menu_item
+                    self._LinkPage._PsIndex = DEFAULT_FOCUSED_ICON
                     self._LinkPage._IconIndex = self._LinkPage._PsIndex
 
     def CreateImageSurf(self):

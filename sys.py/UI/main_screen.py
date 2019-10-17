@@ -14,7 +14,7 @@ from datetime import datetime
 from beeprint import pp
 
 ## local package import
-from constants   import ICON_TYPES,icon_ext,icon_width,icon_height,default_menu_item,RUNEVT
+from constants   import ICON_TYPES,icon_ext,icon_width,icon_height,RUNEVT
 from icon_item   import IconItem
 from page        import Page,PageStack
 from title_bar   import TitleBar
@@ -32,6 +32,7 @@ from lang_manager import MyLangManager
 from widget       import Widget
 
 from counter_screen import CounterScreen
+from config import DEFAULT_FOCUSED_ICON
 
 class MessageBox(Label):
     _Parent = None
@@ -176,7 +177,7 @@ class MainScreen(Widget):
             self._Pages[i].Adjust()
             
             if self._Pages[i]._IconNumbers > 1:
-                self._Pages[i]._PsIndex = default_menu_item
+                self._Pages[i]._PsIndex = DEFAULT_FOCUSED_ICON
                 self._Pages[i]._IconIndex = self._Pages[i]._PsIndex
             
                 
