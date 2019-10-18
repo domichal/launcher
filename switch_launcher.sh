@@ -1,14 +1,15 @@
 #!/bin/bash
 
 path="$HOME"
-bashrcvar="LAUNCHER"
+varname="LAUNCHER"
+bashfile="$path/.start"
 
 # UI SETUP
 MENU_HEIGHT=10
 ALERT_HEIGHT=8
 WIDTH=40
 
-current=$(sed -n "/$bashrcvar=[^\s\\]/p" "$path/.bashrc" | sed -e s/$bashrcvar=//)
+current=$(sed -n "/$varname=[^\s\\]/p" "$bashfile" | sed -e s/$varname=//)
 launchers=()
 i=0
 
@@ -43,7 +44,7 @@ whiptail --title "Confirm" --yesno "GameShell will now reboot to [$selected]. Co
 x=$?
 
 if [ $x -eq 0 ]; then
-	sed -i "s/$bashrcvar=$current/$bashrcvar=$selected/" "$path/.bashrc"
+	sed -i "s/$varname=$current/$varname=$selected/" "$bashfile"
 	sudo reboot
 fi
 
