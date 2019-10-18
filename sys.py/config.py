@@ -25,19 +25,23 @@ ButtonsLayout="xbox"
 ## zero means no action
 PowerLevels = {}
 PowerLevels["supersaving"] = [10,30,120]
-PowerLevels["powersaving"] = [40,120,300]
-PowerLevels["server"]      = [40,120,0]
+PowerLevels["powersaving"] = [40,90,300]
+PowerLevels["server"]      = [40,90,0]
 PowerLevels["balance_saving"] = [40,0,0]
 
 PowerLevel = "balance_saving"
 
-## vvv mylauncher specific vvv ##
+## mylauncher specific      begin
+#
+# The values below would make the launcher behave like the original
+# 
+# ADDMENU_PATH = "/home/cpi/apps/Menu"
+# DEFAULT_FOCUSED_ITEM = 1
 
 ADDMENU_PATH = "/home/cpi/mylauncher/myMenu"
-# 1 is the default value gameshell comes with
-DEFAULT_FOCUSED_ICON = 0
+DEFAULT_FOCUSED_ITEM = 0
 
-## ^^^ mylauncher specific ^^^ ##
+## mylauncher specific      end
 
 def PreparationInAdv():
     global SKIN,ButtonsLayout

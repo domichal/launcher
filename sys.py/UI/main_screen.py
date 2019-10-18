@@ -32,7 +32,7 @@ from lang_manager import MyLangManager
 from widget       import Widget
 
 from counter_screen import CounterScreen
-from config import DEFAULT_FOCUSED_ICON
+from config import DEFAULT_FOCUSED_ITEM
 
 class MessageBox(Label):
     _Parent = None
@@ -177,7 +177,7 @@ class MainScreen(Widget):
             self._Pages[i].Adjust()
             
             if self._Pages[i]._IconNumbers > 1:
-                self._Pages[i]._PsIndex = DEFAULT_FOCUSED_ICON
+                self._Pages[i]._PsIndex = DEFAULT_FOCUSED_ITEM
                 self._Pages[i]._IconIndex = self._Pages[i]._PsIndex
             
                 

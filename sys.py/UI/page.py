@@ -114,6 +114,7 @@ class Page(Widget):
     _Padding = pygame.Rect(0, 0, 0, 0)  # x,y,w,h
     _Margin = pygame.Rect(0, 0, 0, 0)
     _ScrollStep = 1
+    _FocusOnItem = config.DEFAULT_FOCUSED_ITEM
 
     def __init__(self):
         self._Icons = []
@@ -182,7 +183,7 @@ class Page(Widget):
         self._OnShow = False
         
         if self._IconNumbers > 1:
-            self._PsIndex = config.DEFAULT_FOCUSED_ICON
+            self._PsIndex = self._FocusOnItem
             self._IconIndex = self._PsIndex
             self._PrevIconIndex = self._IconIndex
             self._Icons[self._IconIndex]._PosY -= self._SelectedIconTopOffset
@@ -234,7 +235,7 @@ class Page(Widget):
         self._OnShow = False
 
         if self._IconNumbers > 1:
-            self._PsIndex = config.DEFAULT_FOCUSED_ICON
+            self._PsIndex = self._FocusOnItem
             self._IconIndex = self._PsIndex
             self._PrevIconIndex = self._IconIndex
             self._Icons[self._IconIndex]._PosY -= self._SelectedIconTopOffset
@@ -314,7 +315,7 @@ class Page(Widget):
             self._OnShow = False
             
             if self._IconNumbers > 1:
-                self._PsIndex = config.DEFAULT_FOCUSED_ICON
+                self._PsIndex = self._FocusOnItem
                 self._IconIndex = self._PsIndex
                 self._PrevIconIndex = self._IconIndex
                 self._Icons[self._IconIndex]._PosY -= self._SelectedIconTopOffset
