@@ -8,7 +8,7 @@ from util_funcs import color_surface,midRect
 from label      import Label
 from lang_manager import MyLangManager
 from widget     import Widget 
-from config      import DEFAULT_FOCUSED_ICON
+from config      import DEFAULT_FOCUSED_ITEM
 class IconItem(Widget):
     _ImageName=""
     _ImgSurf = None
@@ -66,7 +66,7 @@ class IconItem(Widget):
             elif self._LinkPage._Align == ALIGN["SLeft"]:
                 self._LinkPage.AdjustSAutoLeftAlign()
                 if self._LinkPage._IconNumbers > 1:
-                    self._LinkPage._PsIndex = DEFAULT_FOCUSED_ICON
+                    self._LinkPage._PsIndex = DEFAULT_FOCUSED_ITEM
                     self._LinkPage._IconIndex = self._LinkPage._PsIndex
 
     def CreateImageSurf(self):
