@@ -53,7 +53,7 @@ class PageSelector(Widget):
 
     # Selector outline filename
     # see skin/default/sys.py/gameshell/icons
-    _IconSelector = myconfig.ICON_SELECTOR
+    _IconSelector = "blueselector"
 
     def __init__(self):
         pass
