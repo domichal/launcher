@@ -8,7 +8,7 @@ from util_funcs import color_surface,midRect
 from label      import Label
 from lang_manager import MyLangManager
 from widget     import Widget 
-from config      import DEFAULT_FOCUSED_ITEM
+from myconfig      import DEFAULT_FOCUSED_ITEM
 class IconItem(Widget):
     _ImageName=""
     _ImgSurf = None

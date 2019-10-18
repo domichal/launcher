@@ -23,6 +23,7 @@ from icon_pool import MyIconPool
 from lang_manager import MyLangManager
 from widget import Widget
 import config
+import myconfig
 
 class PageStack:
     def __init__(self):
@@ -52,7 +53,7 @@ class PageSelector(Widget):
 
     # Selector outline filename
     # see skin/default/sys.py/gameshell/icons
-    _IconSelector = config.ICON_SELECTOR
+    _IconSelector = myconfig.ICON_SELECTOR
 
     def __init__(self):
         pass
@@ -114,7 +115,7 @@ class Page(Widget):
     _Padding = pygame.Rect(0, 0, 0, 0)  # x,y,w,h
     _Margin = pygame.Rect(0, 0, 0, 0)
     _ScrollStep = 1
-    _FocusOnItem = config.DEFAULT_FOCUSED_ITEM
+    _FocusOnItem = myconfig.DEFAULT_FOCUSED_ITEM
 
     def __init__(self):
         self._Icons = []

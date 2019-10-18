@@ -6,6 +6,8 @@ import ConfigParser
 
 from util_funcs  import FileExists
 
+import myconfig
+
 class CaseConfigParser(ConfigParser.SafeConfigParser):
     def optionxform(self, optionstr):
         return optionstr
@@ -119,8 +121,8 @@ class SkinManager(object):
     
     def GiveIcon(self,orig_file_or_dir): ## return is string,not Surface
         #doing a wrapper for items in ADDMENU_PATH, to be like Menu/GameShell/*
-        if orig_file_or_dir.startswith(config.ADDMENU_PATH):
-            orig_file_or_dir = orig_file_or_dir.replace(config.ADDMENU_PATH,"../Menu/GameShell/")
+        if orig_file_or_dir.startswith(myconfig.ADDMENU_PATH):
+            orig_file_or_dir = orig_file_or_dir.replace(myconfig.ADDMENU_PATH,"../Menu/GameShell/")
     
         if orig_file_or_dir.startswith(".."):
             ret  = orig_file_or_dir.replace("..",config.SKIN)

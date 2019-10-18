@@ -32,7 +32,8 @@ from lang_manager import MyLangManager
 from widget       import Widget
 
 from counter_screen import CounterScreen
-from config import DEFAULT_FOCUSED_ITEM
+
+from myconfig import DEFAULT_FOCUSED_ITEM
 
 class MessageBox(Label):
     _Parent = None
