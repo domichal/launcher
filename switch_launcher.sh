@@ -15,27 +15,27 @@ i=0
 
 abort(){
     whiptail --title "Aborted" --msgbox "Launcher Switch has been aborted" $ALERT_HEIGHT $WIDTH
-	exit 0
+    exit 0
 }
 
 while IFS= read -r -d $'\0'; do
     if [ -f "$REPLY/.cpirc" ]; then
-	name=$(basename "$REPLY")
-	if [ "$name" != "$current" ]; then
-	    launchers[$((++i))]="$name"
-	fi
+    name=$(basename "$REPLY")
+    if [ "$name" != "$current" ]; then
+        launchers[$((++i))]="$name"
+    fi
     fi
 done < <(find "$path/" -maxdepth 1 -type d -name "*launcher*" -print0 | sort -z)
 
 options=($(for i in "${!launchers[@]}";do echo "$i" "${launchers[i]}";done))
 x=$(whiptail --title "Switch Launcher" \
-	--menu "Currently using [$current].\nOther available launchers:" \
-	$MENU_HEIGHT $WIDTH 0 \
-	"${options[@]}" \
-	2>&1 >/dev/tty)
+    --menu "Currently using [$current].\nOther available launchers:" \
+    $MENU_HEIGHT $WIDTH 0 \
+    "${options[@]}" \
+    2>&1 >/dev/tty)
 
 if [ -z $x ]; then
-	abort
+    abort
 fi
 
 selected=${launchers[x]}
@@ -44,8 +44,8 @@ whiptail --title "Confirm" --yesno "GameShell will now reboot to [$selected]. Co
 x=$?
 
 if [ $x -eq 0 ]; then
-	sed -i "s/$varname=$current/$varname=$selected/" "$bashfile"
-	sudo reboot
+    sed -i "s/$varname=$current/$varname=$selected/" "$bashfile"
+    sudo reboot
 fi
 
 abort
