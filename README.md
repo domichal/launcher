@@ -1,4 +1,4 @@
-#Slightly modded GameShell launcher
+# Slightly modded GameShell launcher
 
 This is modified version of the ClockworkPi's Python launcher.
 Original README.md by clockworkpi can be found [here](https://github.com/clockworkpi/launcher/blob/master/README.md).
@@ -6,20 +6,18 @@ Original README.md by clockworkpi can be found [here](https://github.com/clockwo
 Mylauncher has a few improvements over the original but does not differ functionally from it.
 It can be used side by side with original launchers (launcher and launchergo) and they can all be switched between easily with an available script. It can also run on it's own, however it's advised to keep the original launcher intact to keep the functionality up to date with oncoming clockworkpi additions.
 
-#Screenshots
+# Screenshots
 
 [TODO] to be updated
 ![Screenshot](https://github.com/clockworkpi/GameShellDocs/blob/master/screenshot.png)
 
-#Why?
+# Why?
 
 Disorganised, growing list of items on the main page and updates regularily messing with my tidying ups.
 
-I wanted to be able to keep my homescreen tidy and all the mess hidden but I didn't want to miss out on what clockworkpi adds so wanted to be able to update the GameShell too without a hassle. 
+I wanted to be able to keep my homescreen tidy and all the mess hidden but I didn't want to miss out on what clockworkpi adds so wanted to be able to update the GameShell too without a hassle.
 
-I use this launcher on my GameShell for a while now and am pretty happy with it, so thought I might as well to bring it to a shareable state for others that might enjoy using it too.
-
-#Features
+# Features
 
 * User Menu is moved outside the repository for a complete separation*
 * Alternative launcher switcher added
@@ -27,13 +25,13 @@ I use this launcher on my GameShell for a while now and am pretty happy with it,
 
 _*Those can be switched back to default in the [config](#configuration)_
 
-#Compatibility
+# Compatibility
 
 Beside making the original *Switch Launcher* functionality dysfunctional, this launcher is fully compatible with the default clockworkpi gameshell builds and can work without any disturbance to other launchers and vice versa.
 
-#Installation
+# Installation
 
-##Use installation script
+## Use installation script
 
 [TODO] Add a link
 
@@ -42,13 +40,13 @@ Installation script can be run on GameShell:
 - run it from the console by typing ``. [script location]``
 Or from the PC, but in this case, before running it make sure to make ``homedir`` variable to point to cpi home directory on the sd card.
 
-##Install manually
+## Install manually
 
 Download [mylauncher.zip](https://github.com/domichal/mylauncher/archive/master.zip) and unzip the contents inside ``/home/cpi``
 
 Rename unzipped folder to ``/home/cpi/mylauncher``
 
-###Create a file ``/home/cpi/.start``
+### Create a file ``/home/cpi/.start``
 and paste there the following code:
 ```
 #!/bin/bash
@@ -65,7 +63,7 @@ fi
 chmod 644 /home/cpi/.start
 ```
 
-###Edit ``/home/cpi/.bashrc`` and add this code:
+### Edit ``/home/cpi/.bashrc`` and add this code:
 ```
 if [ -f /home/cpi/.start ]; then
    . /home/cpi/.start
@@ -102,7 +100,7 @@ fi
 That's it!
 Ok, not entirely, the launcher will work, but it will have nothing but a power button in it, so let's
 
-##Add Contents
+## Add Contents
 
 Add your own contents to ``myMenu`` as you normally would, but if it comes to launcher functionalities, unless you are determined to get rid of the original launcher, don't copy things over, link them!
 
@@ -117,7 +115,7 @@ lrwxrwxrwx 1 cpi cpi   45 Oct 19 01:58 99_PowerOFF -> /home/cpi/launcher/Menu/Ga
 ```
 This way you'll keep original clockworkpi functionalities up to date if they're changed or if stuff is added after an update.
 
-###Examples
+### Examples
 
 I like my GameShell related items to be in their own folder, so I've done this:
 ```
@@ -153,12 +151,12 @@ myMenu
 while all the original items are still in the original launcher folder. Cool, huh? You've got the idea!
 But hold on, there's more:
 
-###Icons
+### Icons
 
 If you tried to organise things on GameShell your way previously, you know that now it should be time for some folder traversing to be done to add icons in. But no, you don't have to! You can just drop all the icons in the root folder of your menu (or skin, whatever your preference is).
 Mylauncher is modified to look for icons in application launcher parent folders (up to two levels up by default, so if you want to grow big trees in your menu, you will need to increase it - look for this line: ``allowed = "../.."`` in the ``skin manager.py``)
 
-#Configuration
+# Configuration
 
 Just a bit of.
 All the launcher related settings (both) can be found in ``sys.py/myconfig.py`` and perhaps the comments will make it clear of what these settings change.
@@ -174,7 +172,7 @@ ADDMENU_PATH = "/home/cpi/mylauncher/myMenu"
 DEFAULT_FOCUSED_ITEM = 0
 ```
 
-#Directory structure
+# Directory structure
 
 ```
 /home/cpi/
@@ -195,19 +193,19 @@ DEFAULT_FOCUSED_ITEM = 0
 ├── music
 └── skins
 ```
-#Updates
+# Updates
 
-Mylauncher relies on the content provided by clockworkpi, so no regular updates are planned or really necessary as long as things work. I will try to keep the codebase fairly updated with the clockworkpi repository though. Some improvements on the way are possible too.
+Mylauncher heavily relies on the content provided by clockworkpi, therefore no regular updates are planned or really necessary as long as things work. I will try update the codebase with the clockworkpi repository from time to time though. Some improvements on the way are possible too. We'll see.
 
-#Disclaimer
+# Disclaimer
 
-Use on your own risk ;)
+Use at your own risk ;)
 
-#Before moving to main [TODO]
+# Before moving to main [TODO]
 * tidy up default skin
 * make icon selector rotate? :)) [optional]
 
-#Next steps
+# Next steps
 * add skins to gameshell-other repo
 * add skins to gameshell-other icons drop repo
 
