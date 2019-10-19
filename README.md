@@ -38,7 +38,8 @@ Beside making the original *Switch Launcher* functionality dysfunctional, this l
 Installation script can be run on GameShell:
 - Move it to the menu and click on it
 - run it from the console by typing ``. [script location]``
-Or from the PC, but in this case, before running it make sure to make ``homedir`` variable to point to cpi home directory on the sd card.
+
+Or using the PC, but in this case, before running it make sure to change ``homedir`` variable to point to cpi home directory on the sd card.
 
 ## Install manually
 
