@@ -1,16 +1,16 @@
 # mylauncher - Slightly modded GameShell launcher
 ## With customisable menu location that allows better isolation and easier, update proof personalisation
 
+# Screenshots
+
+[TODO] to be updated
+![Screenshot](https://github.com/clockworkpi/GameShellDocs/blob/master/screenshot.png)
+
 *mylauncher* is a modification of the ClockworkPi's Python launcher and beside the improvements listed below Mylauncher does not differ from the original.
 
 Original README.md by clockworkpi can be found [here](https://github.com/clockworkpi/launcher/blob/master/README.md).
 
 *mylauncher* be used side by side with both original launchers (launcher and launchergo) and they can all be switched between easily with an available script. It can also run on it's own, however it's advised to keep the original launcher intact to keep the functionality up to date with oncoming clockworkpi additions.
-
-# Screenshots
-
-[TODO] to be updated
-![Screenshot](https://github.com/clockworkpi/GameShellDocs/blob/master/screenshot.png)
 
 # Why?
 
@@ -21,7 +21,7 @@ I wanted to be able to keep my homescreen tidy but I didn't want to miss out on 
 
 * User Menu is moved outside the repository allowing complete separation*
 * Alternative launcher switcher added
-* Icon matching mechanism improved, no need for icon location to follow menu strusture anymore!
+* Icon matching mechanism added, no need for icon location to follow menu structure anymore!
 * [UI] Focus is set on the first, most left page item*
 
 _*These can be restored back to defaults in the [config](#configuration)_
@@ -37,10 +37,12 @@ Beside making the original *Switch Launcher* functionality dysfunctional, this l
 [TODO] Add a link
 
 Installation script can be run on GameShell:
-- Move it to the menu and click on it
+- Move it to the menu then click on it
 - run it from the console by typing ``. [script location]``
 
-Or using the PC, but in this case, before running it make sure to change ``homedir`` variable to point to cpi home directory on the sd card.
+Or using the PC, but in this case, before running it make sure to change ``homedir`` variable to point to the correct cpi home directory.
+
+Now, when it's being done, see [adding contents](#add-contents)
 
 ## Install manually
 
@@ -78,7 +80,6 @@ if [ -f /home/cpi/launcher/.cpirc ]; then
 fi
 ```
 (there may be "~" instead of "/home/cpi" there, but it's the same thing at this point, so no worries)
-
 so you end up with something like this:
 ```
 if [ -f /home/cpi/.start ]; then
@@ -89,7 +90,7 @@ if [ -f /home/cpi/launcher/.cpirc ]; then
    . /home/cpi/launcher/.cpirc
 fi
 ```
-You may as well comment the original code as it's not going to be reachable anyway, but keep it there in case you wanted to bring the console back to the original state
+You may as well comment the original code as it's not going to be reachable anyway, but keep it there in case you wanted to bring the console back to the original state easily
 ```
 if [ -f /home/cpi/.start ]; then
    . /home/cpi/.start
@@ -155,13 +156,14 @@ But hold on, there's more:
 
 ### Icons
 
-If you tried to organise things on GameShell your way previously, you know that now it should be time for some folder traversing to be done to add icons in. But no, you don't have to! You can just drop all the icons in the root folder of your menu (or skin, whatever your preference is).
-*mylauncher* is modified to look for icons in application launcher parent folders (up to two levels up by default, so if you want to grow big trees in your menu, you will need to increase it - look for this line: ``allowed = "../.."`` in the ``skin manager.py``)
+If you tried to organise things on GameShell your way previously, you know that now it should be time for some folder traversing to be done to move icons where they should be. But guess what, you don't have to do it anymore!
+
+*mylauncher* is modified to look for icons in application launcher parent folders, same for both skins as well as menu folders (up to two levels up by default, so if you want to grow big trees in your menu, you will need to increase it - look for this line: ``allowed = "../.."`` in the ``skin manager.py``), so just drop all the icons to the menu root! I know, it's quite neat, right?
 
 # Configuration
 
-Just a bit of.
-All the launcher related settings (both) can be found in ``sys.py/myconfig.py`` and perhaps the comments will make it clear of what these settings change.
+Just a tony bit of.
+All the launcher related settings (both of them) can be found in ``sys.py/myconfig.py`` and perhaps the comments will make it clear of what these settings change.
 ```
 # The values below will make the launcher behave/look like original
 # 
@@ -209,7 +211,10 @@ Use at your own risk ;)
 
 # Before moving to main [TODO]
 * tidy up default skin
-* make icon selector rotate? :)) [optional]
+* test installation script in "live" environment (with the real location and all)
+
+# Some time in the meantime
+* make my skin beautiful
 
 # Next steps
 * add skins to gameshell-other repo
