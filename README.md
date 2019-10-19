@@ -1,10 +1,11 @@
 # Slightly modded GameShell launcher
+## With customizable menu location that allows better isolation and easier, update proof personalisation
 
 This is modified version of the ClockworkPi's Python launcher.
 Original README.md by clockworkpi can be found [here](https://github.com/clockworkpi/launcher/blob/master/README.md).
 
-Mylauncher has a few improvements over the original but does not differ functionally from it.
-It can be used side by side with original launchers (launcher and launchergo) and they can all be switched between easily with an available script. It can also run on it's own, however it's advised to keep the original launcher intact to keep the functionality up to date with oncoming clockworkpi additions.
+Beside the improvements listed below Mylauncher does not differ from the original.
+It can be used side by side with both original launchers (launcher and launchergo) and they can all be switched between easily with an available script. It can also run on it's own, however it's advised to keep the original launcher intact to keep the functionality up to date with oncoming clockworkpi additions.
 
 # Screenshots
 
