@@ -201,7 +201,7 @@ DEFAULT_FOCUSED_ITEM = 0
 
 # Uninstalation
 
-Whether you installed *mylauncher* manually or using installation script, reverse the changes listed in manual installation [steps](#installmanually).
+Whether you installed *mylauncher* manually or using installation script, reverse the changes listed in manual installation [steps](#install-manually).
 
 # Disclaimer
 
