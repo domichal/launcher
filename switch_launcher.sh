@@ -14,7 +14,7 @@ launchers=()
 i=0
 
 abort(){
-        whiptail --title "Aborted" --msgbox "Launcher Switch has been aborted" $ALERT_HEIGHT $WIDTH
+    whiptail --title "Aborted" --msgbox "Launcher Switch has been aborted" $ALERT_HEIGHT $WIDTH
 	exit 0
 }
 
