@@ -148,11 +148,11 @@ class SkinManager(object):
             orig_file_or_dir = orig_file_or_dir.replace(myconfig.ADDMENU_PATH,"../Menu/GameShell/")
     
         if orig_file_or_dir.startswith(".."):
-            ret  = orig_file_or_dir.replace("..",config.SKIN)
+            ret  = self.FindIcon(orig_file_or_dir.replace("..",config.SKIN))
             if FileExists(ret) == False:
                 ret = orig_file_or_dir.replace("..",self.DefaultSkin)
         else:
-            ret = config.SKIN+"/sys.py/"+orig_file_or_dir
+            ret = self.FindIcon(config.SKIN+"/sys.py/"+orig_file_or_dir)
             if FileExists(ret) == False:
                 ret = self.DefaultSkin+"/sys.py/"+orig_file_or_dir
 
