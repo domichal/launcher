@@ -1,11 +1,11 @@
-# Slightly modded GameShell launcher
-## With customizable menu location that allows better isolation and easier, update proof personalisation
+# mylauncher - Slightly modded GameShell launcher
+## With customisable menu location that allows better isolation and easier, update proof personalisation
 
-This is modified version of the ClockworkPi's Python launcher.
+*mylauncher* is a modification of the ClockworkPi's Python launcher and beside the improvements listed below Mylauncher does not differ from the original.
+
 Original README.md by clockworkpi can be found [here](https://github.com/clockworkpi/launcher/blob/master/README.md).
 
-Beside the improvements listed below Mylauncher does not differ from the original.
-It can be used side by side with both original launchers (launcher and launchergo) and they can all be switched between easily with an available script. It can also run on it's own, however it's advised to keep the original launcher intact to keep the functionality up to date with oncoming clockworkpi additions.
+*mylauncher* be used side by side with both original launchers (launcher and launchergo) and they can all be switched between easily with an available script. It can also run on it's own, however it's advised to keep the original launcher intact to keep the functionality up to date with oncoming clockworkpi additions.
 
 # Screenshots
 
@@ -14,17 +14,17 @@ It can be used side by side with both original launchers (launcher and launcherg
 
 # Why?
 
-Disorganised, growing list of items on the main page and updates regularily messing with my tidying ups.
-
-I wanted to be able to keep my homescreen tidy and all the mess hidden but I didn't want to miss out on what clockworkpi adds so wanted to be able to update the GameShell too without a hassle.
+Disorganised, growing list of items on the main page and updates was messing with my tidying ups.
+I wanted to be able to keep my homescreen tidy but I didn't want to miss out on what clockworkpi adds so wanted to be able to update GameShell without a hassle too.
 
 # Features
 
-* User Menu is moved outside the repository for a complete separation*
+* User Menu is moved outside the repository allowing complete separation*
 * Alternative launcher switcher added
+* Icon matching mechanism improved, no need for icon location to follow menu strusture anymore!
 * [UI] Focus is set on the first, most left page item*
 
-_*Those can be switched back to default in the [config](#configuration)_
+_*These can be restored back to defaults in the [config](#configuration)_
 
 # Compatibility
 
@@ -156,7 +156,7 @@ But hold on, there's more:
 ### Icons
 
 If you tried to organise things on GameShell your way previously, you know that now it should be time for some folder traversing to be done to add icons in. But no, you don't have to! You can just drop all the icons in the root folder of your menu (or skin, whatever your preference is).
-Mylauncher is modified to look for icons in application launcher parent folders (up to two levels up by default, so if you want to grow big trees in your menu, you will need to increase it - look for this line: ``allowed = "../.."`` in the ``skin manager.py``)
+*mylauncher* is modified to look for icons in application launcher parent folders (up to two levels up by default, so if you want to grow big trees in your menu, you will need to increase it - look for this line: ``allowed = "../.."`` in the ``skin manager.py``)
 
 # Configuration
 
@@ -197,7 +197,11 @@ DEFAULT_FOCUSED_ITEM = 0
 ```
 # Updates
 
-Mylauncher heavily relies on the content provided by clockworkpi, therefore no regular updates are planned or really necessary as long as things work. I will try update the codebase with the clockworkpi repository from time to time though. Some improvements on the way are possible too. We'll see.
+*mylauncher* features heavily rely on clockworkpi launcher updates, therefore no regular updates are planned or really necessary as long as things work. I will try to update the codebase with the clockworkpi repository from time to time though. Some improvements on the way are possible too. We'll see.
+
+# Uninstalation
+
+Whether you installed *mylauncher* manually or using installation script, reverse the changes listed in manual installation [steps](#installmanually).
 
 # Disclaimer
 
