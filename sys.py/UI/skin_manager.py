@@ -121,7 +121,7 @@ class SkinManager(object):
             return  pygame.Color(255,0,0)
 
     def FindIcon(self,filepath):
-	 # limited to avoid searching down the whole tree, but can be increased if needed.
+        # limited to avoid searching down the whole tree, but can be increased if needed.
         allowed = "../.."
         if os.path.isdir(filepath):
             return filepath
@@ -156,7 +156,7 @@ class SkinManager(object):
             if FileExists(ret) == False:
                 ret = self.DefaultSkin+"/sys.py/"+orig_file_or_dir
 
-	ret = self.FindIcon(ret)
+        ret = self.FindIcon(ret)
         if FileExists( ret ):
             return ret
         else:  ## if not existed both in default or custom skin ,return where it is
