@@ -2,6 +2,9 @@
 
 . .conf
 
+cat gameshell
+sleep 1
+
 title="Title"
 menu="What to do?"
 
