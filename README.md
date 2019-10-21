@@ -1,5 +1,5 @@
 # mylauncher - Slightly modded GameShell launcher
-## With customisable menu location that allows better isolation and easier, update proof personalisation
+## With customisable menu location that offers isolation for easier and update proof personalisation
 
 # Screenshots
 
