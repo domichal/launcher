@@ -20,6 +20,7 @@ I like to move things around, categorize games in folders and don't want new ite
 * User Menu is moved outside the repository allowing complete separation*
 * Icon matching mechanism added, no need for icon location to follow menu structure anymore!
 * [UI] Focus is set on the first, most left page item*
+* [UI] Refreshed icon set thanks to this great [source](https://www.figma.com/file/Mzfms2wlOR9l4c7OgP1GhNd5/GameShell?node-id=102%3A486)
 _*These can be changed back to defaults in the [config](#configuration)_
 
 ## Added scripts
