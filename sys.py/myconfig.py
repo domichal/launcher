@@ -6,5 +6,5 @@
 # ADDMENU_PATH = "/home/cpi/apps/Menu"
 # DEFAULT_FOCUSED_ITEM = 1
 
-ADDMENU_PATH = "/home/cpi/mylauncher/myMenu"
+ADDMENU_PATH = "~/mylauncher/myMenu"
 DEFAULT_FOCUSED_ITEM = 0
