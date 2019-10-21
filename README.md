@@ -10,7 +10,7 @@
 
 Original README.md by clockworkpi can be found [here](https://github.com/clockworkpi/launcher/blob/master/README.md).
 
-**mylauncher** be used side by side with both original launchers (launcher and launchergo) and they can all be switched between easily with an available script. It can also run on it's own, however it's advised to leave the original launcher intact to keep the functionality up to date with oncoming clockworkpi additions.
+**mylauncher** can be used side by side with both original launchers (launcher and launchergo) and they can all be switched between easily with a provided script. It can also run on it's own, however it's advised to leave the original launcher intact to keep the functionality up to date with oncoming clockworkpi additions.
 
 # Why?
 
@@ -22,7 +22,6 @@ I like to move things around, categorize games in folders and don't want new ite
 * User Menu is moved outside the repository allowing complete separation*
 * Icon matching mechanism added, no need for icon location to follow menu structure anymore!
 * [UI] Focus is set on the first, most left page item*
-
 _*These can be changed back to defaults in the [config](#configuration)_
 
 ## Added scripts
@@ -34,17 +33,14 @@ _*These can be changed back to defaults in the [config](#configuration)_
 
 ### Launcher switch
 
+To be able to switch between all launchers, it was necessary to make original "switch to launcher/launcher go" methods dysfunctional to prevent them from breaking xstartup when called from ``mylauncher``. This script is not required by the launcher to run, but it makes life easier.
+
 [screenshot]
 
-This tool can work with more launchers and will detect them if the directory name contains lowercase word ``launcher`` and is located in ``/home/cpi``.
-**mylauncher** folder can be also renamed as long as the above are true.
+This tool can work with more launchers and will detect them as long as their directory is located in ``/home/cpi`` and it's name contain lowercase word ``launcher``.
+**mylauncher** folder can also be renamed.
 
-# Compatibility
-
-**mylauncher** is fully compatible with the default clockworkpi gameshell builds and can work without any disturbance to other launchers and vice versa.
-However, change done to ``.bashrc`` allowing **launcher switch** script to work render original launcher/launcher go switch dysfunctional. 
-This needs to be done this way to prevent it from 
-
+**Note:** 
 
 # Installation
 
@@ -149,11 +145,11 @@ ln -s ~/launcher/Menu/GameShell/30_RetroArch.sh 98_GameSH\>/
 ln -s ~/launcher/Menu/GameShell/98_TinyCloud 90_GameSH\>/
 ln -s ~/launcher/Menu/GameShell/90_Reload\ UI.sh 98_GameSH\>/
 ```
-**Launcher tools** (launcher switch & update) will go there too:
+[Launcher tools](#launcher-tools) will go there too:
 ```
 ln -s ~/mylauncher/scripts/91_Launcher\ Tools.sh 98_GameSH\>/
 ```
-Also, I'll link **launcher switcher** to the menu folder utilised by other launchers so I can use it from anywhere:
+Also, I'll link [Launcher switch](#launcher-switch) to the menu folder utilised by other launchers so I can use it from anywhere:
 ```
 ln -s ~/mylauncher/scripts/92_Switch\ Launcher.sh ~/apps/Menu/
 ```
@@ -231,11 +227,15 @@ DEFAULT_FOCUSED_ITEM = 0
 └── skins
 ```
 
+# Compatibility
+
+Aside from ``.bashrc`` modification mentioned in [launcher switch](#launcher-switch) section, **mylauncher** is fully compatible with the default clockworkpi gameshell builds and can work without any disturbance to other launchers and vice versa.
+
 # Updates
 
 No regular updates are planned or really necessary as long as things work. I will try to update the codebase with the clockworkpi repository from time to time though. Some improvements on the way are possible too. We'll see.
 
-To update, use **Launcher tools**
+To update, use [Launcher tools](#launcher-tools)
 
 # Uninstalation
 
