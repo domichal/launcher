@@ -6,29 +6,45 @@
 [TODO] to be updated
 ![Screenshot](https://github.com/clockworkpi/GameShellDocs/blob/master/screenshot.png)
 
-*mylauncher* is a modification of the ClockworkPi's Python launcher and beside the improvements listed below Mylauncher does not differ from the original.
+**mylauncher** is a modification of the ClockworkPi's Python launcher and beside the improvements listed below Mylauncher does not differ from the original.
 
 Original README.md by clockworkpi can be found [here](https://github.com/clockworkpi/launcher/blob/master/README.md).
 
-*mylauncher* be used side by side with both original launchers (launcher and launchergo) and they can all be switched between easily with an available script. It can also run on it's own, however it's advised to keep the original launcher intact to keep the functionality up to date with oncoming clockworkpi additions.
+**mylauncher** be used side by side with both original launchers (launcher and launchergo) and they can all be switched between easily with an available script. It can also run on it's own, however it's advised to leave the original launcher intact to keep the functionality up to date with oncoming clockworkpi additions.
 
 # Why?
 
-Disorganised, growing list of items on the main page and updates was messing with my tidying ups.
-I wanted to be able to keep my homescreen tidy but I didn't want to miss out on what clockworkpi adds so wanted to be able to update GameShell without a hassle too.
+Poorly organised, growing list of items on GameShell's main page and updates that were messing with my tidying ups.
+I like to move things around, categorize games in folders and don't want new items to pop up on my home screen uninvited, but I also don't want to miss out on what clockworkpi adds so want to be able to update GameShell launcher without a hassle too.
 
 # Features
 
 * User Menu is moved outside the repository allowing complete separation*
-* Alternative launcher switcher added
 * Icon matching mechanism added, no need for icon location to follow menu structure anymore!
 * [UI] Focus is set on the first, most left page item*
 
-_*These can be restored back to defaults in the [config](#configuration)_
+_*These can be changed back to defaults in the [config](#configuration)_
+
+## Added scripts
+
+### Launcher tools
+
+[screenshot]
+
+
+### Launcher switch
+
+[screenshot]
+
+This tool can work with more launchers and will detect them if the directory name contains lowercase word ``launcher`` and is located in ``/home/cpi``.
+**mylauncher** folder can be also renamed as long as the above are true.
 
 # Compatibility
 
-Beside making the original *Switch Launcher* functionality dysfunctional, this launcher is fully compatible with the default clockworkpi gameshell builds and can work without any disturbance to other launchers and vice versa.
+**mylauncher** is fully compatible with the default clockworkpi gameshell builds and can work without any disturbance to other launchers and vice versa.
+However, change done to ``.bashrc`` allowing **launcher switch** script to work render original launcher/launcher go switch dysfunctional. 
+This needs to be done this way to prevent it from 
+
 
 # Installation
 
@@ -36,11 +52,11 @@ Beside making the original *Switch Launcher* functionality dysfunctional, this l
 
 [TODO] Add a link
 
-Installation script can be run on GameShell:
-- Move it to the menu then click on it
-- run it from the console by typing ``. [script location]``
-
-Or using the PC, but in this case, before running it make sure to change ``homedir`` variable to point to the correct cpi home directory.
+Quick installation from GameShell console:
+```
+curl -sSL https://[real link will go here] | bash
+```
+The script can also be run on PC to install mylauncher on sd card. In this case download the script and change ``homedir`` variable to point to the correct cpi home location before running it.
 
 Now, when it's being done, see [adding contents](#add-contents)
 
@@ -106,6 +122,7 @@ Ok, not entirely, the launcher will work, but it will have nothing but a power b
 ## Add Contents
 
 Add your own contents to ``myMenu`` as you normally would, but if it comes to launcher functionalities, unless you are determined to get rid of the original launcher, don't copy things over, link them!
+This way you'll keep original clockworkpi functionalities up to date if they're changed or if stuff is added after an update.
 
 PowerOFF is a link too, see?:
 _(I'm logged in as cpi, modify the paths if you are logged as different user)_
@@ -116,53 +133,69 @@ drwxr-xr-x 2 cpi cpi 4096 Oct 19 01:59 .
 drwxr-xr-x 3 cpi cpi 4096 Oct 19 01:59 ..
 lrwxrwxrwx 1 cpi cpi   45 Oct 19 01:58 99_PowerOFF -> /home/cpi/launcher/Menu/GameShell/99_PowerOFF
 ```
-This way you'll keep original clockworkpi functionalities up to date if they're changed or if stuff is added after an update.
+This is the only item in this folder and it's recommended to keep it this way.
 
-### Examples
+### Linking contents
 
-I like my GameShell related items to be in their own folder, so I've done this:
+Time to play with the separated menu:
 ```
 cd ~/mylauncher/myMenu
+```
+I like my GameShell related items to be in their own folder, so I've done this:
+```
 mkdir 98_GameSH\>
 ln -s ~/launcher/Menu/GameShell/10_Settings 98_GameSH\>/
 ln -s ~/launcher/Menu/GameShell/30_RetroArch.sh 98_GameSH\>/
 ln -s ~/launcher/Menu/GameShell/98_TinyCloud 90_GameSH\>/
 ln -s ~/launcher/Menu/GameShell/90_Reload\ UI.sh 98_GameSH\>/
 ```
+**Launcher tools** (launcher switch & update) will go there too:
+```
+ln -s ~/mylauncher/scripts/91_Launcher\ Tools.sh 98_GameSH\>/
+```
+Also, I'll link **launcher switcher** to the menu folder utilised by other launchers so I can use it from anywhere:
+```
+ln -s ~/mylauncher/scripts/92_Switch\ Launcher.sh ~/apps/Menu/
+```
 I want the music player to be on the main screen too, so:
 ```
 ln -s ~/launcher/Menu/GameShell/97_Music\ Player .
 ```
-and let's say I want all the contets from apps/Menu in it's own folder as a first item in my menu:
+Utils will be nice to have, but let's call it Applications:
 ```
-ln -s ~/apps/Menu 00_Apps\ Menu
+ln -s ~/apps/Menu/60_Utils 60_Apllications
+```
+and games, of course:
+```
+ln -s ~/apps/Menu/20_Retro\ Games .
+ln -s ~/apps/Menu/21_Indie\ Games .
 ```
 So now I have this structure in the menu:
 ```
 myMenu
-├── 00_Apps Menu -> /home/cpi/apps/Menu
-│   ├── 20_Retro Games
-│   ├── 21_Indie Games
-│   └── [...]
+├── 20_Retro Games -> /home/cpi/apps/Menu/20_Retro Games
+├── 21_Indie Games -> /home/cpi/apps/Menu/21_Indie Games
+├── 60_Applications -> /home/cpi/apps/Menu/60_Utils
 ├── 97_Music Player -> /home/cpi/launcher/Menu/GameShell/97_Music Player
 └── 98_GameSH>
     ├── 10_Settings -> /home/cpi/launcher/Menu/GameShell/10_Settings
     ├── 30_RetroArch.sh -> /home/cpi/launcher/Menu/GameShell/30_RetroArch.sh
     ├── 90_Reload UI.sh -> /home/cpi/launcher/Menu/GameShell/90_Reload UI.sh
+    ├── 91_Launcher Tools.sh -> /home/cpi/mylauncher/scripts/91_Launcher Tools.sh
     └── 98_TinyCloud -> /home/cpi/launcher/Menu/GameShell/98_TinyCloud
 ```
-while all the original items are still in the original launcher folder. Cool, huh? You've got the idea!
+while all the original items are still in the original launcher folder. Cool, huh?
 But hold on, there's more:
 
 ### Icons
 
-If you tried to organise things on GameShell your way previously, you know that now it should be time for some folder traversing to be done to move icons where they should be. But guess what, you don't have to do it anymore!
+If you tried to organise things your way on GameShell previously, you know that now it should be time for some folder traversing to be done to move icons where they should be. Sure you can do that, but guess what, you don't have to!
 
-*mylauncher* is modified to look for icons in application launcher parent folders, same for both skins as well as menu folders (up to two levels up by default, so if you want to grow big trees in your menu, you will need to increase it - look for this line: ``allowed = "../.."`` in the ``skin manager.py``), so just drop all the icons to the menu root! I know, it's quite neat, right?
+**mylauncher** is modified to look for icons in application launcher parent folders, so for all the items put in ``GameSh>`` if the icons aren't there, it will look in ``myMenu`` too. By default it searches up to two levels up, so if you want to grow big trees in your menu, you will need to increase this value - look for this line: ``allowed = "../.."`` in the ``skin manager.py``.
 
 # Configuration
 
-Just a tony bit of.
+Just a tiny bit of.
 All the launcher related settings (both of them) can be found in ``sys.py/myconfig.py`` and perhaps the comments will make it clear of what these settings change.
 ```
 # The values below will make the launcher behave/look like original
@@ -182,7 +215,7 @@ DEFAULT_FOCUSED_ITEM = 0
 /home/cpi/
 ├── apps
 │   ├── emulators
-│   └── Menu   <- By default, this is not used by this launcher
+│   └── Menu   <- By default, this is not used by mylauncher
 ├── launcher
 ├── launchergo
 ├── mylauncher <- We are here
@@ -197,48 +230,27 @@ DEFAULT_FOCUSED_ITEM = 0
 ├── music
 └── skins
 ```
+
 # Updates
 
-*mylauncher* features heavily rely on clockworkpi launcher updates, therefore no regular updates are planned or really necessary as long as things work. I will try to update the codebase with the clockworkpi repository from time to time though. Some improvements on the way are possible too. We'll see.
+No regular updates are planned or really necessary as long as things work. I will try to update the codebase with the clockworkpi repository from time to time though. Some improvements on the way are possible too. We'll see.
+
+To update, use **Launcher tools**
 
 # Uninstalation
 
-Whether you installed *mylauncher* manually or using installation script, reverse the changes listed in manual installation [steps](#install-manually).
-
-# Disclaimer
-
-Use at your own risk ;)
+Whether you installed **mylauncher** manually or using installation script, reverse the changes listed in manual installation [steps](#install-manually).
 
 # Before moving to main [TODO]
+* add icons for **launcher tools** and **launcher switch**
+* make screenshots
 * tidy up default skin
-* test installation script in "live" environment (with the real location and all)
+* create an associated repo for addons (mylauncher-doc)
+* upload installation script and skin
+* test installation script on "live" environment (with the real location, live scripts and all)
 
 # Some time in the meantime
 * make my skin beautiful
 
 # Next steps
-* add skins to gameshell-other repo
-* add skins to gameshell-other icons drop repo
-
-```
-  .------------------------.
-  | .--------------------. |
-  | |                    | |
-,-| |                    | |-.
-| | |                    | | |
-'-| |                    | |-'
-  | |                    | |
-  | |                    | |
-  | `--------------------' |
-  |  GameSH>               |
-  | ,--. ,-.    ,--. ,--.  |
-  | '--' '-'    '--' '--'  |
-  |     _          ,-.     |
-  |   _| |_     ,-.'-',-.  |
-  |  |_ O _|    '-',-.'-'  |
-  |    |_|         '-'     |
-  |                        |
-  |  ::::::::::::::::::::  |
-  | o                    o |
-  `------------------------'
-```
+* add icons drop to gameshell-other repo [optional]
