@@ -1,9 +1,7 @@
 # mylauncher - Slightly modded GameShell launcher
-## With customisable menu location that offers isolation for easier and update proof personalisation
+With customisable menu location that helps with isolation for easier and update proof personalisation
 
-# Screenshots
-
-[TODO] to be updated
+[TODO] update screenshots
 ![Screenshot](https://github.com/clockworkpi/GameShellDocs/blob/master/screenshot.png)
 
 **mylauncher** is a modification of the ClockworkPi's Python launcher and beside the improvements listed below Mylauncher does not differ from the original.
@@ -33,12 +31,14 @@ _*These can be changed back to defaults in the [config](#configuration)_
 
 ### Launcher switch
 
-To be able to switch between all launchers, it was necessary to make original "switch to launcher/launcher go" methods dysfunctional to prevent them from breaking xstartup when called from ``mylauncher``. This script is not required by the launcher to run, but it makes life easier.
+To be able to switch between all launchers, it was necessary to make original "switch to launcher/launcher go" methods dysfunctional to prevent them from breaking xstartup scripts when called from ``mylauncher``.
+
+This script is not required by the launcher to run, but it makes life easier. Other way to use different launchers would be to rename launcher folders, or manually modifying ``.bashrc``. This scripts handles the latter.
 
 [screenshot]
 
-This tool can work with more launchers and will detect them as long as their directory is located in ``/home/cpi`` and it's name contain lowercase word ``launcher``.
-**mylauncher** folder can also be renamed.
+The script will detect any number of launchers as long as they are located in ``/home/cpi`` and their name contain lowercase word ``launcher``.
+**mylauncher** folder can also be renamed in accordance to the above.
 
 **Note:** 
 
@@ -52,7 +52,7 @@ Quick installation from GameShell console:
 ```
 curl -sSL https://[real link will go here] | bash
 ```
-The script can also be run on PC to install mylauncher on sd card. In this case download the script and change ``homedir`` variable to point to the correct cpi home location before running it.
+The script can also be run on PC to install **mylauncher** on sd card. In this case download the script and change ``homedir`` variable to point to the correct cpi home location before running it.
 
 Now, when it's being done, see [adding contents](#add-contents)
 
@@ -121,7 +121,6 @@ Add your own contents to ``myMenu`` as you normally would, but if it comes to la
 This way you'll keep original clockworkpi functionalities up to date if they're changed or if stuff is added after an update.
 
 PowerOFF is a link too, see?:
-_(I'm logged in as cpi, modify the paths if you are logged as different user)_
 ```
 $ ls -la ~/Menu/GameShell
 total 8
@@ -133,7 +132,11 @@ This is the only item in this folder and it's recommended to keep it this way.
 
 ### Linking contents
 
-Time to play with the separated menu:
+Time to play with the separated menu, so log in as cpi, if you aren't:
+```
+su cpi
+```
+and move to the new menu folder:
 ```
 cd ~/mylauncher/myMenu
 ```
@@ -149,7 +152,7 @@ ln -s ~/launcher/Menu/GameShell/90_Reload\ UI.sh 98_GameSH\>/
 ```
 ln -s ~/mylauncher/scripts/91_Launcher\ Tools.sh 98_GameSH\>/
 ```
-Also, I'll link [Launcher switch](#launcher-switch) to the menu folder utilised by other launchers so I can use it from anywhere:
+Also, I'll link [Switch Launcher script](#launcher-switch) to the menu folder utilised by other launchers so I can use it from anywhere:
 ```
 ln -s ~/mylauncher/scripts/92_Switch\ Launcher.sh ~/apps/Menu/
 ```
@@ -194,11 +197,12 @@ If you tried to organise things your way on GameShell previously, you know that 
 Just a tiny bit of.
 All the launcher related settings (both of them) can be found in ``sys.py/myconfig.py`` and perhaps the comments will make it clear of what these settings change.
 ```
+# ADDMENU_PATH - Path to the secondary menu folder, feel free to move it outside the launcher folder
+# DEFAULT_FOCUSED_ITEM - Item to be highlighted by default on page render
+#
 # The values below will make the launcher behave/look like original
-# 
-# Path to the secondary menu folder, feel free to move it outside the launcher folder
+#
 # ADDMENU_PATH = "/home/cpi/apps/Menu"
-# Item to be highlighted by default on page render
 # DEFAULT_FOCUSED_ITEM = 1
 
 ADDMENU_PATH = "/home/cpi/mylauncher/myMenu"
@@ -229,15 +233,15 @@ DEFAULT_FOCUSED_ITEM = 0
 
 # Compatibility
 
-Aside from ``.bashrc`` modification mentioned in [launcher switch](#launcher-switch) section, **mylauncher** is fully compatible with the default clockworkpi gameshell builds and can work without any disturbance to other launchers and vice versa.
+**mylauncher** is fully compatible with the default clockworkpi gameshell builds and can work without any disturbance to other launchers and vice versa.
 
 # Updates
 
-No regular updates are planned or really necessary as long as things work. I will try to update the codebase with the clockworkpi repository from time to time though. Some improvements on the way are possible too. We'll see.
+No regular updates are planned. I will try to update the codebase with the clockworkpi repository from time to time though. Some improvements in the future are possible too. We'll see.
 
 To update, use [Launcher tools](#launcher-tools)
 
-# Uninstalation
+# Uninstallation
 
 Whether you installed **mylauncher** manually or using installation script, reverse the changes listed in manual installation [steps](#install-manually).
 
