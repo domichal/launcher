@@ -5,6 +5,10 @@
 varname="LAUNCHER"
 bashfile="$HOMEDIR/.start"
 
+if [ -f "$bashfile" ]; then
+    abort "No [$bashfile] found!"
+fi
+
 # UI SETUP
 MENU_HEIGHT=10
 ALERT_HEIGHT=8
@@ -15,7 +19,12 @@ launchers=()
 i=0
 
 abort(){
-    whiptail --title "Aborted" --msgbox "Launcher Switch has been aborted" $ALERT_HEIGHT $WIDTH
+    if [ "$1" == "" ]; then
+	msg="Launcher Switch has been aborted"
+    else
+	msg="$1"
+    fi
+    whiptail --title "Aborted" --msgbox "$msg" $ALERT_HEIGHT $WIDTH
     exit 0
 }
 
