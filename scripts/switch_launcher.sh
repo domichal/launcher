@@ -9,11 +9,6 @@ if [ -f "$bashfile" ]; then
     abort "No [$bashfile] found!"
 fi
 
-# UI SETUP
-MENU_HEIGHT=10
-ALERT_HEIGHT=8
-WIDTH=40
-
 current=$(sed -n "/$varname=[^\s\\]/p" "$bashfile" | sed -e s/$varname=//)
 launchers=()
 i=0
