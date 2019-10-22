@@ -1,6 +1,10 @@
 # mylauncher - Slightly modded GameShell launcher
 With customisable menu location providing isolation for easier and update proof personalisation
 
+Quick Install:
+```
+curl -sSL https://raw.githubusercontent.com/domichal/GameSH-etc/master/install-mylauncher.sh | bash
+```
 
 ![Screenshot_Mylauncher](https://github.com/domichal/GameSH-etc/raw/master/images/mylauncher.png)
 
