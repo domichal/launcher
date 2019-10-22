@@ -3,7 +3,7 @@
 . .conf
 
 varname="LAUNCHER"
-bashfile="$HOMEDIR/.start"
+bashfile="$HOMEDIR/.startrc"
 
 if [ -f "$bashfile" ]; then
     abort "No [$bashfile] found!"
