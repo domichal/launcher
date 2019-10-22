@@ -71,9 +71,9 @@ curl -sSL https://raw.githubusercontent.com/domichal/GameSH-etc/master/install-m
 ```
 Then proceed with [adding contents](#add-contents).
 
-## Download and use installation script
+## Download installation script
 
-Download script [here](https://raw.githubusercontent.com/domichal/GameSH-etc/master/install-mylauncher.sh).
+Download [here](https://raw.githubusercontent.com/domichal/GameSH-etc/master/install-mylauncher.sh).
 
 The script can also be run on PC to install **mylauncher** on sd card. In this case download the script and change ``homedir`` variable to point to the correct cpi home location before running it.
 
