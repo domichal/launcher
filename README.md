@@ -91,7 +91,7 @@ fi
 ```
 *Optional:* Change file permissions to ``rw-r--r--``
 ```
-chmod 755 /home/cpi/.startrc
+chmod 644 /home/cpi/.startrc
 ```
 
 ### Edit ``/home/cpi/.bashrc`` and add this code:
@@ -249,6 +249,3 @@ To update, use [Launcher tools](#launcher-tools)
 # Uninstallation
 
 Whether you installed **mylauncher** manually or using installation script, reverse the changes listed in manual installation [steps](#install-manually).
-
-# Before moving to main [TODO]
-* test installation script on "live" environment (with the real location, live scripts and all)
