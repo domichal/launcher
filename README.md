@@ -159,11 +159,11 @@ ln -s ~/launcher/Menu/GameShell/90_Reload\ UI.sh 98_GameSH\>/
 ```
 ln -s ~/mylauncher/scripts/91_Launcher\ Tools.sh 98_GameSH\>/
 ```
-Also, I'll link [Switch Launcher script](#launcher-switch) to the menu folder utilised by other launchers so I can use it from anywhere:
+I'll also link [Switch Launcher script](#launcher-switch) to the ``~apps/Menu`` fso it's available from other launchers:
 ```
 ln -s ~/mylauncher/scripts/92_Switch\ Launcher.sh ~/apps/Menu/
 ```
-I want the music player to be on the main screen too, so:
+Music player to the main screen:
 ```
 ln -s ~/launcher/Menu/GameShell/97_Music\ Player .
 ```
@@ -246,9 +246,9 @@ DEFAULT_FOCUSED_ITEM = 0
 
 # Updates
 
-No regular updates are planned. I will try to sync this repo with the clockworkpi repository from time to time though. Some improvements in the future are possible too. We'll see.
+**Update Launcher (git)** option is only available if the launcher folder is checked out with the repository.
 
-To update, use [Launcher tools](#launcher-tools)
+No regular updates are planned. I will try to sync this repo with the clockworkpi repository from time to time though. Some improvements in the future are possible too. We'll see.
 
 # Uninstallation
 
