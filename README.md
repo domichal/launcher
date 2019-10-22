@@ -47,6 +47,14 @@ The script will detect any number of launchers as long as they are located in ``
 
 # Installation
 
+## Requirements
+
+There's one for installation script: ``zip``
+I don't remember if it was installed on GameShell by default, but if not:
+```
+sudo apt install -y zip
+```
+
 ## Quick installation
 
 From GameShell console:
@@ -69,7 +77,7 @@ Download [mylauncher.zip](https://github.com/domichal/mylauncher/archive/master.
 
 Rename unzipped folder to ``/home/cpi/mylauncher``
 
-### Create a file ``/home/cpi/.start``
+### Create a file ``/home/cpi/.startrc``
 and paste there the following code:
 ```
 #!/bin/bash
@@ -83,41 +91,29 @@ fi
 ```
 *Optional:* Change file permissions to ``rw-r--r--``
 ```
-chmod 644 /home/cpi/.start
+chmod 755 /home/cpi/.startrc
 ```
 
 ### Edit ``/home/cpi/.bashrc`` and add this code:
 ```
 if [ -f /home/cpi/.start ]; then
    . /home/cpi/.start
-fi
+el
 ```
-BEFORE the following "if" statement at the end of the file:
+JUST BEFORE (no spaces, new lines, nada!) the following "if" statement at the end of the file:
+(there may be "$HOME" instead of "/home/cpi" there, but it points to the same thing at this point, so no worries)
 ```
 if [ -f /home/cpi/launcher/.cpirc ]; then
    . /home/cpi/launcher/.cpirc
 fi
 ```
-(there may be "~" instead of "/home/cpi" there, but it's the same thing at this point, so no worries)
 so you end up with something like this:
 ```
-if [ -f /home/cpi/.start ]; then
-   . /home/cpi/.start
-fi
-
-if [ -f /home/cpi/launcher/.cpirc ]; then
+if [ -f /home/cpi/.startrc ]; then
+   . /home/cpi/.startrc
+elif [ -f /home/cpi/launcher/.cpirc ]; then
    . /home/cpi/launcher/.cpirc
 fi
-```
-You may as well comment the original code as it's not going to be reachable anyway, but keep it there in case you wanted to bring the console back to the original state easily
-```
-if [ -f /home/cpi/.start ]; then
-   . /home/cpi/.start
-fi
-
-#if [ -f /home/cpi/launcher/.cpirc ]; then
-#   . /home/cpi/launcher/.cpirc
-#fi
 ```
 That's it!
 Ok, not entirely, the launcher will work, but it will have nothing but a power button in it, so let's
@@ -198,6 +194,8 @@ But hold on, there's more:
 If you tried to organise things your way on GameShell previously, you know that now it should be time for some folder traversing to be done to move icons where they should be. Sure you can do that, but guess what, you don't have to!
 
 **mylauncher** is modified to look for icons in application launcher parent folders, so for all the items put in ``GameSh>`` if the icons aren't there, it will look in ``myMenu`` too. By default it searches up to two levels up, so if you want to grow big trees in your menu, you will need to increase this value - look for this line: ``allowed = "../.."`` in the ``skin manager.py``.
+
+Ok, it's time to restart. Your gameshell should boot into **mylauncher** now.
 
 # Configuration
 
