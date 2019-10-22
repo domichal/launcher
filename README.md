@@ -255,4 +255,4 @@ No regular updates are planned. I will try to sync this repo with the clockworkp
 Whether you installed **mylauncher** manually or using installation script, reverse the changes listed in manual installation [steps](#install-manually).
 
 ---
-You may also like my GameShell launcher [mod](https://github.com/domichal/GameSH-Theme-Greey).
+You may also like my GameShell [dark skin](https://github.com/domichal/GameSH-Theme-Greey).
