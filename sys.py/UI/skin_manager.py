@@ -3,8 +3,11 @@
 import pygame
 import config
 import ConfigParser
+import os
 
 from util_funcs  import FileExists
+
+import myconfig
 
 class CaseConfigParser(ConfigParser.SafeConfigParser):
     def optionxform(self, optionstr):
@@ -116,25 +119,48 @@ class SkinManager(object):
             return SkinManager._Colors[name]
         else:
             return  pygame.Color(255,0,0)
+
+    def FindIcon(self,filepath):
+        # limited to avoid searching down the whole tree, but can be increased if needed.
+        allowed = "../.."
+        if os.path.isdir(filepath):
+            return filepath
+        elif os.path.isfile(filepath):
+            return filepath
+        arr = filepath.split("/")
+        name = arr.pop()
+        pth = "/".join(arr)
+        found = ""
+        deepest = os.path.normpath(os.path.join(pth, allowed))
+        while found == "" and pth != deepest:
+            searching = os.path.normpath(os.path.join(pth, name))
+            if os.path.isfile(searching):
+                found = searching
+                return found
+            else:
+                pth = os.path.normpath(os.path.join(pth, ".."))
+
+        return filepath
     
     def GiveIcon(self,orig_file_or_dir): ## return is string,not Surface
-        #doing a wrapper for items under /home/cpi/apps/Menu/*, to be like Menu/GameShell/*
-        if orig_file_or_dir.startswith("/home/cpi/apps/Menu"):
-            orig_file_or_dir = orig_file_or_dir.replace("/home/cpi/apps/Menu/","../Menu/GameShell/")
+        #doing a wrapper for items in ADDMENU_PATH, to be like Menu/GameShell/*
+        if orig_file_or_dir.startswith(myconfig.ADDMENU_PATH):
+            orig_file_or_dir = orig_file_or_dir.replace(myconfig.ADDMENU_PATH,"../Menu/GameShell/")
     
         if orig_file_or_dir.startswith(".."):
-            ret  = orig_file_or_dir.replace("..",config.SKIN)
+            ret  = self.FindIcon(orig_file_or_dir.replace("..",config.SKIN))
             if FileExists(ret) == False:
                 ret = orig_file_or_dir.replace("..",self.DefaultSkin)
         else:
-            ret = config.SKIN+"/sys.py/"+orig_file_or_dir
+            ret = self.FindIcon(config.SKIN+"/sys.py/"+orig_file_or_dir)
             if FileExists(ret) == False:
                 ret = self.DefaultSkin+"/sys.py/"+orig_file_or_dir
-    
+
+        ret = self.FindIcon(ret)
         if FileExists( ret ):
             return ret
         else:  ## if not existed both in default or custom skin ,return where it is
-            return orig_file_or_dir
+            return self.FindIcon(orig_file_or_dir)
             
     def GiveWallpaper(self,png_name):
         #first SKIN/wallpapers/xxxx.png

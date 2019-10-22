@@ -49,6 +49,8 @@ from UI.createby_screen import CreateByScreen
 from UI.skin_manager import MySkinManager
 from libs.DBUS            import setup_dbus
 
+import myconfig
+
 
 if not pygame.display.get_init():
     pygame.display.init()
@@ -557,7 +559,7 @@ def big_loop():
     main_screen.Init()
     
     main_screen.ReadTheDirIntoPages("../Menu",0,None)
-    main_screen.ReadTheDirIntoPages("/home/cpi/apps/Menu",1,main_screen._Pages[ len(main_screen._Pages) -1])
+    main_screen.ReadTheDirIntoPages(myconfig.ADDMENU_PATH,1,main_screen._Pages[ len(main_screen._Pages) -1])
     main_screen.ReunionPagesIcons()
     
     main_screen.FartherPages()

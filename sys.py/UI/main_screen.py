@@ -14,7 +14,7 @@ from datetime import datetime
 from beeprint import pp
 
 ## local package import
-from constants   import ICON_TYPES,icon_ext,icon_width,icon_height,default_menu_item,RUNEVT
+from constants   import ICON_TYPES,icon_ext,icon_width,icon_height,RUNEVT
 from icon_item   import IconItem
 from page        import Page,PageStack
 from title_bar   import TitleBar
@@ -32,6 +32,8 @@ from lang_manager import MyLangManager
 from widget       import Widget
 
 from counter_screen import CounterScreen
+
+from myconfig import DEFAULT_FOCUSED_ITEM
 
 class MessageBox(Label):
     _Parent = None
@@ -176,7 +178,7 @@ class MainScreen(Widget):
             self._Pages[i].Adjust()
             
             if self._Pages[i]._IconNumbers > 1:
-                self._Pages[i]._PsIndex = default_menu_item
+                self._Pages[i]._PsIndex = DEFAULT_FOCUSED_ITEM
                 self._Pages[i]._IconIndex = self._Pages[i]._PsIndex
             
                 
@@ -403,7 +405,7 @@ class MainScreen(Widget):
                 return True
         return False
     
-    def ReunionPagesIcons(self): #This is for combining /home/cpi/apps/Menu and ~/launcher/Menu/GameShell 
+    def ReunionPagesIcons(self): #This is for combining additional menu together with ~/launcher/Menu/GameShell 
         for p in self._Pages:
             tmp = []
             for i,x in enumerate(p._Icons):

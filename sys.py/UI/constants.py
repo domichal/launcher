@@ -13,17 +13,12 @@ from pygame.locals import *
 
 #UI lib
 
-
 Width = 320
 Height = 240
-
-# 1 is the value gameshell comes with
-default_menu_item = 0
 
 icon_width  = 80
 icon_height = 80
 icon_ext = ".sh"
-
 
 ICON_TYPES={"Commercial":8,"Emulator":7,"FILE":6,"STAT":5,"NAV":4,"LETTER":3,"FUNC":2,"DIR":1,"EXE":0,"None":-1} # FUNC is like UI widget's function,DIR contains child page,EXE just execute a binary
 
