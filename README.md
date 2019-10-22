@@ -1,8 +1,8 @@
 # mylauncher - Slightly modded GameShell launcher
-With customisable menu location that helps with isolation for easier and update proof personalisation
+With customisable menu location providing isolation for easier and update proof personalisation
 
 [TODO] update screenshots
-![Screenshot](https://github.com/clockworkpi/GameShellDocs/blob/master/screenshot.png)
+![Screenshot_Mylauncher](https://github.com/domichal/GameSH-etc/raw/master/images/mylauncher.png)
 
 **mylauncher** is a modification of the ClockworkPi's Python launcher and beside the improvements listed below Mylauncher does not differ from the original.
 
@@ -14,6 +14,7 @@ Original README.md by clockworkpi can be found [here](https://github.com/clockwo
 
 Poorly organised, growing list of items on GameShell's main page and updates that were messing with my tidying ups.
 I like to move things around, categorize games in folders and don't want new items to pop up on my home screen uninvited, but I also don't want to miss out on what clockworkpi adds so want to be able to update GameShell launcher without a hassle too.
+I needed an up to date bare bone launcher that won't mess with my content and this is it.
 
 # Features
 
@@ -27,7 +28,7 @@ _*These can be changed back to defaults in the [config](#configuration)_
 
 ### Launcher tools
 
-[screenshot]
+![Launcher_tools](https://github.com/domichal/GameSH-etc/raw/master/images/launcher_tools.png)
 
 
 ### Launcher switch
@@ -36,7 +37,7 @@ To be able to switch between all launchers, it was necessary to make original "s
 
 This script is not required by the launcher to run, but it makes life easier. Other way to use different launchers would be to rename launcher folders, or manually modifying ``.bashrc``. This scripts handles the latter.
 
-[screenshot]
+![Launcher_tools](https://github.com/domichal/GameSH-etc/raw/master/images/switch_launcher.png)
 
 The script will detect any number of launchers as long as they are located in ``/home/cpi`` and their name contain lowercase word ``launcher``.
 **mylauncher** folder can also be renamed in accordance to the above.
@@ -47,12 +48,11 @@ The script will detect any number of launchers as long as they are located in ``
 
 ## Use installation script
 
-[TODO] Add a link
-
 Quick installation from GameShell console:
 ```
-curl -sSL https://[real link will go here] | bash
+curl -sSL https://raw.githubusercontent.com/domichal/GameSH-etc/master/install-mylauncher.sh | bash
 ```
+Or download [here](https://raw.githubusercontent.com/domichal/GameSH-etc/master/install-mylauncher.sh).
 The script can also be run on PC to install **mylauncher** on sd card. In this case download the script and change ``homedir`` variable to point to the correct cpi home location before running it.
 
 Now, when it's being done, see [adding contents](#add-contents)
