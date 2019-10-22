@@ -246,7 +246,7 @@ DEFAULT_FOCUSED_ITEM = 0
 
 # Updates
 
-**Update Launcher (git)** option is only available if the launcher folder is checked out with the repository.
+[Update mylauncher (git)](#launcher-tools) option is only available if the launcher folder is checked out with the repository.
 
 No regular updates are planned. I will try to sync this repo with the clockworkpi repository from time to time though. Some improvements in the future are possible too. We'll see.
 
