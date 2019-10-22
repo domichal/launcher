@@ -5,7 +5,7 @@
 cat gameshell
 sleep 1
 
-title="Title"
+title="Launcher Tools"
 menu="What to do?"
 
 opts=(1 "switch launcher"

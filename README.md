@@ -1,10 +1,13 @@
 # mylauncher - Slightly modded GameShell launcher
 With customisable menu location providing isolation for easier and update proof personalisation
 
-[TODO] update screenshots
+
 ![Screenshot_Mylauncher](https://github.com/domichal/GameSH-etc/raw/master/images/mylauncher.png)
 
-**mylauncher** is a modification of the ClockworkPi's Python launcher and beside the improvements listed below Mylauncher does not differ from the original.
+
+# What's my launcher?
+
+**mylauncher** is a modification of the ClockworkPi's Python launcher and beside the improvements listed below it does not differ from the original.
 
 Original README.md by clockworkpi can be found [here](https://github.com/clockworkpi/launcher/blob/master/README.md).
 
@@ -42,20 +45,23 @@ This script is not required by the launcher to run, but it makes life easier. Ot
 The script will detect any number of launchers as long as they are located in ``/home/cpi`` and their name contain lowercase word ``launcher``.
 **mylauncher** folder can also be renamed in accordance to the above.
 
-**Note:** 
-
 # Installation
 
-## Use installation script
+## Quick installation
 
-Quick installation from GameShell console:
+From GameShell console:
 ```
 curl -sSL https://raw.githubusercontent.com/domichal/GameSH-etc/master/install-mylauncher.sh | bash
 ```
-Or download [here](https://raw.githubusercontent.com/domichal/GameSH-etc/master/install-mylauncher.sh).
+Then go to [adding contents](#add-contents).
+
+## Download and use installation script
+
+Download script [here](https://raw.githubusercontent.com/domichal/GameSH-etc/master/install-mylauncher.sh).
+
 The script can also be run on PC to install **mylauncher** on sd card. In this case download the script and change ``homedir`` variable to point to the correct cpi home location before running it.
 
-Now, when it's being done, see [adding contents](#add-contents)
+After installing go to [adding contents](#add-contents).
 
 ## Install manually
 
@@ -238,7 +244,7 @@ DEFAULT_FOCUSED_ITEM = 0
 
 # Updates
 
-No regular updates are planned. I will try to update the codebase with the clockworkpi repository from time to time though. Some improvements in the future are possible too. We'll see.
+No regular updates are planned. I will try to sync this repo with the clockworkpi repository from time to time though. Some improvements in the future are possible too. We'll see.
 
 To update, use [Launcher tools](#launcher-tools)
 
@@ -247,15 +253,4 @@ To update, use [Launcher tools](#launcher-tools)
 Whether you installed **mylauncher** manually or using installation script, reverse the changes listed in manual installation [steps](#install-manually).
 
 # Before moving to main [TODO]
-* add icons for **launcher tools** and **launcher switch**
-* make screenshots
-* tidy up default skin
-* create an associated repo for addons (mylauncher-doc)
-* upload installation script and skin
 * test installation script on "live" environment (with the real location, live scripts and all)
-
-# Some time in the meantime
-* make my skin beautiful
-
-# Next steps
-* add icons drop to gameshell-other repo [optional]
