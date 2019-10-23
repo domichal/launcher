@@ -25,6 +25,7 @@ I needed an up to date bare bone launcher that won't mess with my content and th
 * Icon matching mechanism added, no need for icon location to follow menu structure anymore!
 * [UI] Focus is set on the first, most left page item*
 * [UI] Refreshed icon set thanks to this great [source](https://www.figma.com/file/Mzfms2wlOR9l4c7OgP1GhNd5/GameShell?node-id=102%3A486)
+
 _*These can be changed back to defaults in the [config](#configuration)_
 
 ## Added scripts
@@ -49,7 +50,8 @@ The script will detect any number of launchers as long as they are located in ``
 
 ## Requirements
 
-There's one for installation script: ``zip``
+There's one for installation script: ``zip``.
+
 I don't remember if it was installed on GameShell by default, but if not:
 ```
 sudo apt install -y zip
@@ -57,11 +59,13 @@ sudo apt install -y zip
 
 ## Quick installation
 
-From GameShell console:
+**Note:** The script will install the launcher and modify ``.bashrc`` file. Fore details, see [manual installation](#install-manually) steps.
+
+Install from GameShell console:
 ```
 curl -sSL https://raw.githubusercontent.com/domichal/GameSH-etc/master/install-mylauncher.sh | bash
 ```
-Then go to [adding contents](#add-contents).
+Then proceed with [adding contents](#add-contents).
 
 ## Download and use installation script
 
@@ -69,7 +73,7 @@ Download script [here](https://raw.githubusercontent.com/domichal/GameSH-etc/mas
 
 The script can also be run on PC to install **mylauncher** on sd card. In this case download the script and change ``homedir`` variable to point to the correct cpi home location before running it.
 
-After installing go to [adding contents](#add-contents).
+After installing go to [add contents](#add-contents).
 
 ## Install manually
 
@@ -91,7 +95,7 @@ fi
 ```
 *Optional:* Change file permissions to ``rw-r--r--``
 ```
-chmod 755 /home/cpi/.startrc
+chmod 644 /home/cpi/.startrc
 ```
 
 ### Edit ``/home/cpi/.bashrc`` and add this code:
@@ -155,11 +159,11 @@ ln -s ~/launcher/Menu/GameShell/90_Reload\ UI.sh 98_GameSH\>/
 ```
 ln -s ~/mylauncher/scripts/91_Launcher\ Tools.sh 98_GameSH\>/
 ```
-Also, I'll link [Switch Launcher script](#launcher-switch) to the menu folder utilised by other launchers so I can use it from anywhere:
+I'll also link [Switch Launcher script](#launcher-switch) to the ``~apps/Menu`` fso it's available from other launchers:
 ```
 ln -s ~/mylauncher/scripts/92_Switch\ Launcher.sh ~/apps/Menu/
 ```
-I want the music player to be on the main screen too, so:
+Music player to the main screen:
 ```
 ln -s ~/launcher/Menu/GameShell/97_Music\ Player .
 ```
@@ -242,13 +246,10 @@ DEFAULT_FOCUSED_ITEM = 0
 
 # Updates
 
-No regular updates are planned. I will try to sync this repo with the clockworkpi repository from time to time though. Some improvements in the future are possible too. We'll see.
+[Update mylauncher (git)](#launcher-tools) option is only available if the launcher folder is checked out with the repository.
 
-To update, use [Launcher tools](#launcher-tools)
+No regular updates are planned. I will try to sync this repo with the clockworkpi repository from time to time though. Some improvements in the future are possible too. We'll see.
 
 # Uninstallation
 
 Whether you installed **mylauncher** manually or using installation script, reverse the changes listed in manual installation [steps](#install-manually).
-
-# Before moving to main [TODO]
-* test installation script on "live" environment (with the real location, live scripts and all)
