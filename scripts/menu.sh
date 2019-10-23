@@ -8,9 +8,12 @@ sleep 1
 title="Launcher Tools"
 menu="What to do?"
 
-opts=(1 "switch launcher"
-      2 "update mylauncher (git)"
-      3 "update system (apt)")
+i=0
+opts=($((++i)) "switch launcher")
+if [ -d "$LAUNCHERDIR/.git" ]; then
+	opts+=($((++i)) "update mylauncher (git)")
+fi
+opts+=($((++i)) "update system (apt)")
 
 x=$(whiptail --title "$title" \
          --menu "$msg" \
@@ -18,12 +21,13 @@ x=$(whiptail --title "$title" \
          "${opts[@]}" \
          2>&1 >/dev/tty)
 
-if [ $x -eq 1 ]; then
+if [[ $x -eq 1 ]]; then
     ./switch_launcher.sh
-elif [ $x -eq 2 ]; then
+elif [[ $x -eq 2 ]]; then
     ./update_launcher.sh
-elif [ $x -eq 3 ]; then
+elif [[ $x -eq 3 ]]; then
     ./update_system.sh
 fi
 
 #exit 0
+
