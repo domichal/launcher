@@ -28,6 +28,7 @@ class SkinManager(object):
     _Config = None
     _Fonts = {}
     DefaultSkin = "../skin/default"
+    SecondaryMenu = myconfig.ADDMENU_PATH           # "/home/cpi/apps/Menu"
 
     def __init__(self):
         self.Init()
@@ -144,10 +145,10 @@ class SkinManager(object):
     
     def GiveIcon(self,orig_file_or_dir): ## return is string,not Surface
         #doing a wrapper for items in ADDMENU_PATH, to be like Menu/GameShell/*
-        if orig_file_or_dir.startswith(myconfig.ADDMENU_PATH):
+        if orig_file_or_dir.startswith():
 	    ret  = self.FindIcon(orig_file_or_dir)
 	    if FileExists(ret) == False:
-	      	orig_file_or_dir = orig_file_or_dir.replace(myconfig.ADDMENU_PATH,"../Menu/GameShell/")
+	      	orig_file_or_dir = orig_file_or_dir.replace(self.SecondaryMenu,"../Menu/GameShell/")
 	    else:
 		return ret
     
