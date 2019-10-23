@@ -129,7 +129,7 @@ Ok, not entirely, the launcher will work, but it will have nothing but a power b
 ## Add Contents
 
 Add your own contents to ``myMenu`` as you normally would, but if it comes to launcher functionalities, unless you are determined to get rid of the original launcher, don't copy things over, link them!
-This way you'll keep original clockworkpi functionalities up to date if they're changed or if stuff is added after an update.
+This way you'll keep original clockworkpi functionalities up to date if they're changed or if stuff is added in the future.
 
 PowerOFF is a link too, see?:
 ```
