@@ -203,6 +203,11 @@ If you tried to organise things your way on GameShell previously, you know that 
 
 **mylauncher** is modified to look for icons in application launcher parent folders, so for all the items put in ``GameSh>`` if the icons aren't there, it will look in ``myMenu`` too. By default it searches up to two levels up, so if you want to grow big trees in your menu, you will need to increase this value - look for this line: ``allowed = "../.."`` in the ``skin manager.py``.
 
+Cascade search for Icon is done in the following order:
+- original location and up - this location isn't searched for icons in the original launcher.
+- user set skin and up
+- default skin and up
+
 Ok, it's time to restart. Your gameshell should boot into **mylauncher** now.
 
 # Configuration
