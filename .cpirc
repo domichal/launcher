@@ -1,3 +1,5 @@
+#!/bashrc
+
 SCREEN=`cat /sys/class/graphics/fb0/modes`
 
 XORG_CONF="~/mylauncher/.xorg.conf"

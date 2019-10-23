@@ -121,22 +121,3 @@ def InGameShell():
         return True
     else:
         return False
-
-def FindIcon(filepath):
-    # This needs to be changed to allow searching more levels, 
-    # limited to avoid searching down the whole tree, but can be increased if needed.
-    allowed = "../.."
-    arr = filepath.split("/")
-    name = arr.pop()
-    pth = "/".join(arr)
-    found = ""
-    deepest = os.path.normpath(os.path.join(pth, allowed))
-    while found == "" and pth != deepest:
-        searching = os.path.join(pth, name)
-        if os.path.isfile(searching):
-            found = searching
-            return found
-        else:
-            pth = os.path.normpath(os.path.join(pth, ".."))
-
-    return False
