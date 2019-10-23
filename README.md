@@ -129,7 +129,7 @@ Ok, not entirely, the launcher will work, but it will have nothing but a power b
 ## Add Contents
 
 Add your own contents to ``myMenu`` as you normally would, but if it comes to launcher functionalities, unless you are determined to get rid of the original launcher, don't copy things over, link them!
-This way you'll keep original clockworkpi functionalities up to date if they're changed or if stuff is added after an update.
+This way you'll keep original clockworkpi functionalities up to date if they're changed or if stuff is added in the future.
 
 PowerOFF is a link too, see?:
 ```
@@ -156,14 +156,14 @@ I like my GameShell related items to be in their own folder, so I've done this:
 mkdir 98_GameSH\>
 ln -s ~/launcher/Menu/GameShell/10_Settings 98_GameSH\>/
 ln -s ~/launcher/Menu/GameShell/30_RetroArch.sh 98_GameSH\>/
-ln -s ~/launcher/Menu/GameShell/98_TinyCloud 90_GameSH\>/
+ln -s ~/launcher/Menu/GameShell/98_TinyCloud 98_GameSH\>/
 ln -s ~/launcher/Menu/GameShell/90_Reload\ UI.sh 98_GameSH\>/
 ```
 [Launcher tools](#launcher-tools) will go there too:
 ```
 ln -s ~/mylauncher/scripts/91_Launcher\ Tools.sh 98_GameSH\>/
 ```
-I'll also link [Switch Launcher script](#launcher-switch) to the ``~apps/Menu`` fso it's available from other launchers:
+I'll also link [Switch Launcher script](#launcher-switch) to the ``~apps/Menu`` so it's available from other launchers:
 ```
 ln -s ~/mylauncher/scripts/92_Switch\ Launcher.sh ~/apps/Menu/
 ```
@@ -202,6 +202,11 @@ But hold on, there's more:
 If you tried to organise things your way on GameShell previously, you know that now it should be time for some folder traversing to be done to move icons where they should be. Sure you can do that, but guess what, you don't have to!
 
 **mylauncher** is modified to look for icons in application launcher parent folders, so for all the items put in ``GameSh>`` if the icons aren't there, it will look in ``myMenu`` too. By default it searches up to two levels up, so if you want to grow big trees in your menu, you will need to increase this value - look for this line: ``allowed = "../.."`` in the ``skin manager.py``.
+
+Cascade search for Icon is done in the following order:
+- original location and up - this location isn't searched for icons in the original launcher.
+- user set skin and up
+- default skin and up
 
 Ok, it's time to restart. Your gameshell should boot into **mylauncher** now.
 
