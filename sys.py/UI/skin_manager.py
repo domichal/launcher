@@ -29,6 +29,8 @@ class SkinManager(object):
     _Fonts = {}
     DefaultSkin = "../skin/default"
     SecondaryMenu = myconfig.ADDMENU_PATH           # "/home/cpi/apps/Menu"
+    # limited to avoid searching down the whole tree
+    IconSearchDepth = "../.."
 
     def __init__(self):
         self.Init()
@@ -122,8 +124,6 @@ class SkinManager(object):
             return  pygame.Color(255,0,0)
 
     def FindIcon(self,filepath):
-        # limited to avoid searching down the whole tree, but can be increased if needed.
-        allowed = "../.."
         if os.path.isdir(filepath):
             return filepath
         elif os.path.isfile(filepath):
@@ -132,7 +132,7 @@ class SkinManager(object):
         name = arr.pop()
         pth = "/".join(arr)
         found = ""
-        deepest = os.path.normpath(os.path.join(pth, allowed))
+        deepest = os.path.normpath(os.path.join(pth, self.IconSearchDepth))
         while found == "" and pth != deepest:
             searching = os.path.normpath(os.path.join(pth, name))
             if os.path.isfile(searching):
