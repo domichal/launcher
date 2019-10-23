@@ -163,7 +163,7 @@ ln -s ~/launcher/Menu/GameShell/90_Reload\ UI.sh 98_GameSH\>/
 ```
 ln -s ~/mylauncher/scripts/91_Launcher\ Tools.sh 98_GameSH\>/
 ```
-I'll also link [Switch Launcher script](#launcher-switch) to the ``~apps/Menu`` fso it's available from other launchers:
+I'll also link [Switch Launcher script](#launcher-switch) to the ``~apps/Menu`` so it's available from other launchers:
 ```
 ln -s ~/mylauncher/scripts/92_Switch\ Launcher.sh ~/apps/Menu/
 ```
