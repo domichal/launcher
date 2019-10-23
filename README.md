@@ -156,7 +156,7 @@ I like my GameShell related items to be in their own folder, so I've done this:
 mkdir 98_GameSH\>
 ln -s ~/launcher/Menu/GameShell/10_Settings 98_GameSH\>/
 ln -s ~/launcher/Menu/GameShell/30_RetroArch.sh 98_GameSH\>/
-ln -s ~/launcher/Menu/GameShell/98_TinyCloud 90_GameSH\>/
+ln -s ~/launcher/Menu/GameShell/98_TinyCloud 98_GameSH\>/
 ln -s ~/launcher/Menu/GameShell/90_Reload\ UI.sh 98_GameSH\>/
 ```
 [Launcher tools](#launcher-tools) will go there too:
