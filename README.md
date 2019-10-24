@@ -261,7 +261,11 @@ No regular updates are planned. I will try to sync this repo with the clockworkp
 
 # Uninstallation
 
-Whether you installed **mylauncher** manually or using installation script, reverse the changes listed in manual installation [steps](#install-manually).
+```
+mv ~/.bashrc.bak ~/.bashrc
+rm ~/.startrc
+rm -rf ~/mylauncher
+```
 
 ---
 You may also like my GameShell [dark skin](https://github.com/domichal/GameSH-Theme-Greey).
