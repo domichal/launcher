@@ -262,6 +262,7 @@ No regular updates are planned. I will try to sync this repo with the clockworkp
 # Uninstallation
 
 ```
+cd /home/cpi
 mv ~/.bashrc.bak ~/.bashrc
 rm ~/.startrc
 rm -rf ~/mylauncher
