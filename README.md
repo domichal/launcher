@@ -63,7 +63,7 @@ sudo apt install -y zip
 
 ## Quick installation
 
-**Note:** The script will install the launcher and modify ``.bashrc`` file. Fore details, see [manual installation](#install-manually) steps.
+**Note:** The script will install the launcher and modify ``.bashrc`` file. The file will be backed up to ``.bashrc.bak`` for easy rollback. Fore details, see [manual installation](#install-manually) steps.
 
 Install from GameShell console:
 ```
@@ -100,6 +100,11 @@ fi
 *Optional:* Change file permissions to ``rw-r--r--``
 ```
 chmod 644 /home/cpi/.startrc
+```
+
+### Backup ``/home/cpi/.bashrc``.
+```
+cp /home/cpi/.bashrc /home/cpi/.bashrc.bak
 ```
 
 ### Edit ``/home/cpi/.bashrc`` and add this code:
