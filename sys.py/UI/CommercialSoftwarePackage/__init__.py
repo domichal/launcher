@@ -272,7 +272,8 @@ class MyCommercialSoftwarePackage(object):
         
         os.chdir(json_config["GameDir"])
         for i,v in enumerate(json_config["MD5"]):
-            os.system("unzip -o %s" %v) ## auto overwrite 
+            if FileExists(v):
+                os.system("unzip -o %s" %v) ## auto overwrite 
         
         if "Post-Up" in json_config:
             if FileExists(self._InvokeDir):
@@ -339,6 +340,12 @@ class MyCommercialSoftwarePackage(object):
     def API(self,main_screen):
         if main_screen !=None:
             if self._Done != "":
+                #try to check if the installed package still there, if not ,remove the done flag file 
+                if FileExists(os.path.join(self._ComPkgInfo["GameDir"],self._ComPkgInfo["InstallDir"] )) == False:
+                    done_file = os.path.join( os.path.dirname(self._Done),".done")
+                    if FileExists(done_file):
+                        os.remove(done_file)
+                
                 main_screen._MsgBox.SetText("Starting")
                 main_screen._MsgBox.Draw()
                 main_screen.SwapAndShow()
