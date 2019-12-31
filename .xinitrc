@@ -11,7 +11,7 @@ hdmi )
 	exec ~/mylauncher/dwm-mod
 	;;
 gameshell )
-	exec ~/mylauncher/aria2c --conf-path=/home/cpi/launcher/aria2.conf & 
+	exec ~/mylauncher/aria2c --conf-path=/home/cpi/mylauncher/aria2.conf & 
 	feh --bg-center ~/mylauncher/sys.py/gameshell/wallpaper/loading.png
         cd ~/mylauncher/sys.py/ ; python appinstaller.py > /tmp/appinstaller.log  & cd ~/
 	exec ~/mylauncher/load.sh &
