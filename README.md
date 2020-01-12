@@ -109,8 +109,8 @@ cp /home/cpi/.bashrc /home/cpi/.bashrc.bak
 
 ### Edit ``/home/cpi/.bashrc`` and add this code:
 ```
-if [ -f /home/cpi/.start ]; then
-   . /home/cpi/.start
+if [ -f /home/cpi/.startrc ]; then
+   . /home/cpi/.startrc
 el
 ```
 JUST BEFORE (no spaces, new lines, nada!) the following "if" statement at the end of the file:
